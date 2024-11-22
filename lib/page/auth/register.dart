@@ -1,10 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:travel_savy/controllers/authentication.dart';
 
 class RegistPage extends StatelessWidget {
-  const RegistPage({super.key});
+  RegistPage({Key? key}) : super(key: key);
+
+  // Controller untuk input
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    final AuthenticationController _authenticationController =
+        Get.put(AuthenticationController());
+
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -12,64 +23,46 @@ class RegistPage extends StatelessWidget {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Color(0xFF277BC0), // Warna pertama (277BC0)
-              Color(0xFF071952), // Warna kedua (071952)
+              Color(0xFF277BC0), // Warna pertama
+              Color(0xFF071952), // Warna kedua
             ],
           ),
         ),
-        child: Stack(
-          children: [
-            // // Bulat atas di kiri atas
-            // Positioned(
-            //   top: 0,
-            //   left: -13,
-            //   child: SizedBox(
-            //     width: 175,
-            //     height: 175,
-            //     child: Image.asset('assets/images/bulatatas.png'),
-            //   ),
-            // ),
+        child: Align(
+          alignment: Alignment.center,
+          child: Container(
+            padding: const EdgeInsets.all(15),
+            height: 636,
+            width: 324,
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.all(Radius.circular(25)),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text(
+                    'Travel Savy',
+                    style: TextStyle(
+                      fontSize: 40,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  const Text(
+                    'Sign Up is Easier',
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
 
-            Align(
-              alignment: Alignment.center,
-              child: Container(
-                padding: const EdgeInsets.only(left: 15, top: 20, right: 15),
-                height: 636,
-                width: 324,
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(25),
-                      topRight: Radius.circular(25),
-                      bottomLeft: Radius.circular(25),
-                      bottomRight: Radius.circular(25)),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Text(
-                        'Travel Savy',
-                        style: TextStyle(
-                          fontSize: 40,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-
-                      const Text(
-                        'Sign Up is Easier',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey,
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-
-                      // Social Media Buttons
+                                        // Social Media Buttons
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -115,63 +108,75 @@ class RegistPage extends StatelessWidget {
                         ],
                       ),
                       const SizedBox(height: 20),
-                      const TextField(
-                        decoration: InputDecoration(
-                          labelText: 'Email or Phone number',
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      const TextField(
-                        obscureText: true,
-                        decoration: InputDecoration(
-                          labelText: 'Fullname',
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      const TextField(
-                        obscureText: true,
-                        decoration: InputDecoration(
-                          labelText: 'Username',
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      const TextField(
-                        obscureText: true,
-                        decoration: InputDecoration(
-                          labelText: 'Password',
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
-                      const SizedBox(height: 10),
 
-                      // Remember Me and Login Button
-                      Center(
-                        child: Column(
-                          children: [
-                            ElevatedButton(
-                              onPressed: () {},
-                              style: ElevatedButton.styleFrom(
-                                
-                                backgroundColor: Colors
-                                    .blue, // Ubah warna tombol menjadi biru
-                              ),
-                              child: const Text('Register'),
-                            ),
-                            const SizedBox(height: 10),
-                          ],
-                        ),
-                      ),
-
-                      const SizedBox(height: 10),
-                    ],
+                  // Input Fields
+                  TextField(
+                    controller: _nameController,
+                    decoration: const InputDecoration(
+                      labelText: 'Full Name',
+                      border: OutlineInputBorder(),
+                    ),
                   ),
-                ),
+                  const SizedBox(height: 10),
+                  TextField(
+                    controller: _usernameController,
+                    decoration: const InputDecoration(
+                      labelText: 'Username',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  TextField(
+                    controller: _emailController,
+                    decoration: const InputDecoration(
+                      labelText: 'Email',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  TextField(
+                    controller: _passwordController,
+                    obscureText: true,
+                    decoration: const InputDecoration(
+                      labelText: 'Password',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+
+                  // Register Button
+                  Obx(() {
+                    return _authenticationController.isLoading.value
+                        ? const CircularProgressIndicator()
+                        : ElevatedButton(
+                            onPressed: () async {
+                              // Validasi input
+                              if (_nameController.text.isEmpty ||
+                                  _usernameController.text.isEmpty ||
+                                  _emailController.text.isEmpty ||
+                                  _passwordController.text.isEmpty) {
+                                Get.snackbar('Error', 'All fields are required!',
+                                    snackPosition: SnackPosition.BOTTOM);
+                                return;
+                              }
+
+                              await _authenticationController.register(
+                                name: _nameController.text.trim(),
+                                username: _usernameController.text.trim(),
+                                email: _emailController.text.trim(),
+                                password: _passwordController.text.trim(),
+                              );
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.blue,
+                            ),
+                            child: const Text('Register'),
+                          );
+                  }),
+                ],
               ),
             ),
-          ],
+          ),
         ),
       ),
     );

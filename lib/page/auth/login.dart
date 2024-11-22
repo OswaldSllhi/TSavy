@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:travel_savy/page/auth/register.dart'; // Pastikan RegistPage diimpor
+import 'package:get/get.dart';
+import 'package:travel_savy/controllers/authentication.dart';
+import 'package:travel_savy/page/auth/register.dart';
+import 'package:travel_savy/page/home_screen.dart'; // Import HomeScreen
 
 class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
+  LoginPage({Key? key}) : super(key: key);
+
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    final AuthenticationController _authenticationController =
+        Get.put(AuthenticationController());
+
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -13,8 +22,8 @@ class LoginPage extends StatelessWidget {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Color(0xFF277BC0), // Warna pertama (277BC0)
-              Color(0xFF071952), // Warna kedua (071952)
+              Color(0xFF277BC0),
+              Color(0xFF071952),
             ],
           ),
         ),
@@ -60,35 +69,57 @@ class LoginPage extends StatelessWidget {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const TextField(
-                        decoration: InputDecoration(
-                          labelText: 'Email or Phone number',
+                      // Input username
+                      TextField(
+                        controller: _usernameController,
+                        decoration: const InputDecoration(
+                          labelText: 'Username',
                           border: OutlineInputBorder(),
                         ),
                       ),
                       const SizedBox(height: 20),
-                      const TextField(
+
+                      // Input password
+                      TextField(
+                        controller: _passwordController,
                         obscureText: true,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           labelText: 'Password',
                           border: OutlineInputBorder(),
                         ),
                       ),
                       const SizedBox(height: 20),
 
-                      // Remember Me and Login Button
+                      // Remember me and login button
                       Row(
                         children: [
                           Checkbox(value: false, onChanged: (value) {}),
                           const Text("Remember me?"),
                           const Spacer(),
                           ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () async {
+                              // Panggil fungsi login saat tombol ditekan
+                              await _authenticationController.login(
+                                username: _usernameController.text.trim(),
+                                password: _passwordController.text.trim(),
+                              );
+                              
+                              // Pastikan navigasi terjadi setelah login sukses
+                              if (_authenticationController.token.isNotEmpty) {
+                                // Jika token berhasil disimpan, arahkan ke HomeScreen
+                                Get.offAll(() => HomeScreen());
+                              }
+                            },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor:
-                                  Colors.blue, // Ubah warna tombol menjadi biru
+                              backgroundColor: Colors.blue,
                             ),
-                            child: const Text('Log in'),
+                            child: Obx(() {
+                              return _authenticationController.isLoading.value
+                                  ? const CircularProgressIndicator(
+                                      color: Colors.white,
+                                    )
+                                  : const Text('Log in');
+                            }),
                           ),
                         ],
                       ),
@@ -145,11 +176,11 @@ class LoginPage extends StatelessWidget {
                       // Register Text
                       TextButton(
                         onPressed: () {
-                          // Navigate to Register Page
+                          // Navigasi ke halaman registrasi
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const RegistPage(),
+                              builder: (context) => RegistPage(),
                             ),
                           );
                         },

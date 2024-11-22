@@ -17,7 +17,7 @@ class _SplashPageState extends State<SplashPage> {
       // Navigasi ke LoginPage dan menggantikan halaman SplashPage
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const LoginPage()),
+        MaterialPageRoute(builder: (context) =>  LoginPage()),
       );
     });
   }
