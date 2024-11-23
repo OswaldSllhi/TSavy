@@ -5,10 +5,12 @@ import 'package:http/http.dart' as http;
 import 'package:travel_savy/constants/constants.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:travel_savy/page/home_screen.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
 class AuthenticationController extends GetxController {
   final isLoading = false.obs;
-  
+
   final token = ''.obs;
   final box = GetStorage();
 
@@ -21,7 +23,7 @@ class AuthenticationController extends GetxController {
   }) async {
     try {
       isLoading.value = true;
-      
+
       var data = {
         'name': name,
         'username': username,
@@ -39,7 +41,7 @@ class AuthenticationController extends GetxController {
 
       if (response.statusCode == 201) {
         debugPrint('Register Success: ${json.decode(response.body)}');
-        
+
         var responseData = json.decode(response.body);
         token.value = responseData['token'];
 
@@ -72,65 +74,148 @@ class AuthenticationController extends GetxController {
       isLoading.value = false; // Reset loading state setelah request
     }
   }
-  // Fungsi login
+
   Future<void> login({
     required String username,
     required String password,
   }) async {
-    isLoading.value = true;  // Mengatur status loading
-
     try {
-      // Membuat data request
+      isLoading.value = true; // Tampilkan loading indicator
+
+      // Data yang dikirim ke API
       var data = {
         'username': username,
         'password': password,
       };
 
-      // URL API untuk login
+      // Kirim permintaan POST ke endpoint login
       var response = await http.post(
-        Uri.parse('https://example.com/login'), // Gantilah dengan URL login Anda
-        headers: {'Accept': 'application/json'},
+        Uri.parse('${url}login'), // Pastikan URL valid
+        headers: {
+          'Accept': 'application/json', // Header yang diperlukan API
+        },
         body: data,
       );
 
-      // Mengecek status response
+      // Periksa status respons
       if (response.statusCode == 200) {
-        // Menyimpan response ke dalam variabel
+        // Parsing respons JSON
         var responseData = json.decode(response.body);
 
-        // Mengecek apakah response berisi token
+        // Simpan token jika tersedia
         if (responseData.containsKey('token')) {
-          // Menyimpan token di GetStorage
           token.value = responseData['token'];
-          box.write('token', token.value); // Menyimpan token secara persisten
+          box.write('token', token.value);
 
-          // Debugging: Menampilkan token yang baru disimpan
-          debugPrint("Token berhasil disimpan: ${box.read('token')}");
+          debugPrint("Token: ${box.read('token')}");
 
-          // Navigasi ke HomeScreen setelah login sukses
+          // Navigasi ke HomeScreen
           Get.offAll(() => HomeScreen());
-
-          // Tampilkan snackbar untuk sukses login
-          Get.snackbar('Login Success', 'Welcome, ${responseData['user']['name']}!',
-              snackPosition: SnackPosition.BOTTOM);
         } else {
-          // Jika token tidak ada dalam response, tampilkan pesan error
-          Get.snackbar('Login Failed', 'No token found in the response.',
-              snackPosition: SnackPosition.BOTTOM);
+          Get.snackbar(
+            'Error',
+            'Login successful, but no token found.',
+            snackPosition: SnackPosition.TOP,
+            backgroundColor: Colors.red,
+            colorText: Colors.white,
+          );
         }
+      } else if (response.statusCode == 401) {
+        // Kredensial salah
+        Get.snackbar(
+          'Error',
+          'Invalid username or password.',
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
       } else {
-        // Jika status bukan 200, tampilkan pesan error
-        Get.snackbar('Login Failed', 'Invalid credentials.',
-            snackPosition: SnackPosition.BOTTOM);
+        // Respons lainnya
+        var errorMessage =
+            json.decode(response.body)['message'] ?? 'Login failed.';
+        Get.snackbar(
+          'Error',
+          errorMessage,
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
       }
     } catch (e) {
-      // Tangani error jika terjadi exception pada request
-      debugPrint('Exception: ${e.toString()}');
-      Get.snackbar('Login Failed', 'An error occurred while logging in.',
-          snackPosition: SnackPosition.BOTTOM);
+      // Tangani error
+      debugPrint('Login Exception: $e');
+      Get.snackbar(
+        'Error',
+        'Something went wrong. Please try again later.',
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
     } finally {
-      isLoading.value = false;  // Reset status loading setelah selesai
+      isLoading.value = false; // Sembunyikan loading indicator
     }
   }
+
+//fungsi login google
+  Future<void> signInWithGoogle() async {
+    try {
+      final GoogleSignIn googleSignIn = GoogleSignIn();
+      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+
+      if (googleUser == null) return; // User membatalkan login
+
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+      final String? idToken = googleAuth.idToken;
+
+      // Kirim token ke backend Laravel
+      final response = await http.post(
+        Uri.parse('https://${url}/api/login/google'),
+        body: {'id_token': idToken},
+      );
+
+      if (response.statusCode == 200) {
+        // Berhasil login
+        print('Login success: ${response.body}');
+      } else {
+        print('Login failed: ${response.body}');
+      }
+    } catch (e) {
+      print('Error during Google Sign-In: $e');
+    }
+  }
+
+Future<void> signInWithFacebook() async {
+  try {
+    final LoginResult result = await FacebookAuth.instance.login();
+
+    if (result.status == LoginStatus.success) {
+      // Ambil token dari hasil login
+      final String accessToken = result.accessToken!.tokenString;
+
+      // Kirim token ke backend Laravel
+      final response = await http.post(
+        Uri.parse('https://${url}/api/login/facebook'),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({'access_token': accessToken}),
+      );
+
+      if (response.statusCode == 200) {
+        // Berhasil login
+        print('Login success: ${response.body}');
+      } else {
+        // Gagal login
+        print('Login failed: ${response.body}');
+      }
+    } else {
+      // Login dibatalkan atau gagal
+      print('Facebook login cancelled or failed: ${result.status}');
+    }
+  } catch (e) {
+    print('Error during Facebook Sign-In: $e');
+  }
+}
 
 }

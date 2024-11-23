@@ -98,17 +98,12 @@ class LoginPage extends StatelessWidget {
                           const Spacer(),
                           ElevatedButton(
                             onPressed: () async {
-                              // Panggil fungsi login saat tombol ditekan
+                              // Panggil fungsi login
                               await _authenticationController.login(
                                 username: _usernameController.text.trim(),
                                 password: _passwordController.text.trim(),
                               );
-                              
-                              // Pastikan navigasi terjadi setelah login sukses
-                              if (_authenticationController.token.isNotEmpty) {
-                                // Jika token berhasil disimpan, arahkan ke HomeScreen
-                                Get.offAll(() => HomeScreen());
-                              }
+                              // Tidak perlu lagi menulis navigasi di sini, karena sudah diatur di fungsi login
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.blue,
@@ -121,6 +116,7 @@ class LoginPage extends StatelessWidget {
                                   : const Text('Log in');
                             }),
                           ),
+
                         ],
                       ),
                       const SizedBox(height: 20),

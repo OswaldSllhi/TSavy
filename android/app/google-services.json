@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "535232265605",
+    "project_id": "travel-savy-4c4db",
+    "storage_bucket": "travel-savy-4c4db.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:535232265605:android:910e02cff84cf8447398ec",
+        "android_client_info": {
+          "package_name": "com.example.p_mobile"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDLFydSAwynoGCQpup0MO-R5FN5brKFUjU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
