@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="gcm_defaultSenderId" translatable="false">535232265605</string>
+    <string name="google_api_key" translatable="false">AIzaSyDLFydSAwynoGCQpup0MO-R5FN5brKFUjU</string>
+    <string name="google_app_id" translatable="false">1:535232265605:android:a34a155d496869097398ec</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyDLFydSAwynoGCQpup0MO-R5FN5brKFUjU</string>
+    <string name="google_storage_bucket" translatable="false">travel-savy-4c4db.firebasestorage.app</string>
+    <string name="project_id" translatable="false">travel-savy-4c4db</string>
+</resources>

@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:travel_savy/page/auth/login.dart';
 import 'package:travel_savy/page/auth/register.dart';
+import 'package:travel_savy/page/profile_dashboard.dart';
+import 'package:travel_savy/page/splash.dart';
 
 void main() async {
   await GetStorage.init();
@@ -36,7 +38,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home:  LoginPage(),
+      home:  SplashPage(),
     );
   }
 }

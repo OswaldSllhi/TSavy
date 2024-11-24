@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:travel_savy/page/auth/login.dart';
 
 class SplashPage extends StatefulWidget {
@@ -12,13 +13,10 @@ class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
     super.initState();
-    // Menjalankan fungsi setelah 5 detik
-    Future.delayed(const Duration(seconds: 5), () {
-      // Navigasi ke LoginPage dan menggantikan halaman SplashPage
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) =>  LoginPage()),
-      );
+
+    // Navigasi ke LoginPage setelah 2 detik
+    Future.delayed(const Duration(seconds: 2), () {
+      Get.offAll(() => LoginPage());
     });
   }
 
@@ -34,14 +32,14 @@ class _SplashPageState extends State<SplashPage> {
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  Color(0xFF277BC0), // Warna pertama (277BC0)
-                  Color(0xFF071952), // Warna kedua (071952)
+                  Color(0xFF277BC0),
+                  Color(0xFF071952),
                 ],
               ),
             ),
           ),
 
-          // Bulat atas di kiri atas dengan ukuran lebih kecil
+          // Logo di tengah
           Positioned(
             top: 0,
             left: -13,

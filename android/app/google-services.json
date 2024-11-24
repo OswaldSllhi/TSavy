@@ -7,9 +7,28 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:535232265605:android:910e02cff84cf8447398ec",
+        "mobilesdk_app_id": "1:535232265605:android:a34a155d496869097398ec",
         "android_client_info": {
-          "package_name": "com.example.p_mobile"
+          "package_name": "com.example.travel_savy"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDLFydSAwynoGCQpup0MO-R5FN5brKFUjU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:535232265605:android:9fbd15e8923a24dd7398ec",
+        "android_client_info": {
+          "package_name": "com.example.tsavy"
         }
       },
       "oauth_client": [],

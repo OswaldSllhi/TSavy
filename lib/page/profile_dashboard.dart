@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:travel_savy/controllers/authentication.dart';
 import 'package:travel_savy/page/home_screen.dart';
 import 'terms_and_privacy.dart';
 import 'profile.dart';
@@ -10,6 +12,21 @@ class ProfileDashboard extends StatefulWidget {
 }
 
 class _ProfileDashboardState extends State<ProfileDashboard> {
+  String? userName;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Retrieve the user's name from GetStorage
+    var userData = GetStorage().read('user');
+    if (userData != null) {
+      setState(() {
+        userName = userData['name'];
+      });
+    }
+  }
+
   void onProfileTap(BuildContext context) {
     Navigator.push(
       context,
@@ -77,7 +94,7 @@ class _ProfileDashboardState extends State<ProfileDashboard> {
           ),
           SizedBox(height: 10),
           Text(
-            'Hi, Sabet',
+            'Hi, ${userName ?? "User"}',  // Display the user's name dynamically
             style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 20),
@@ -144,6 +161,23 @@ class _ProfileDashboardState extends State<ProfileDashboard> {
                     trailing: Icon(Icons.arrow_forward_ios),
                     onTap: () {
                       onTermsTap(context);
+                    },
+                  ),
+                  ListTile(
+                    leading: Icon(
+                      Icons.exit_to_app,
+                      color: Colors.black,
+                    ),
+                    title: Text(
+                      "Log Out",
+                      style: TextStyle(color: Colors.red),
+                    ),
+                    trailing: Icon(
+                      Icons.arrow_forward_ios,
+                      color: Colors.black,
+                    ),
+                    onTap: () {
+                      AuthenticationController().logout();  // Call the logout function
                     },
                   ),
                 ],

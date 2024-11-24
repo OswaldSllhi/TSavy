@@ -9,11 +9,11 @@ class LoginPage extends StatelessWidget {
 
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  RxBool rememberMe = false.obs; // Mengatur status checkbox
 
   @override
   Widget build(BuildContext context) {
-    final AuthenticationController _authenticationController =
-        Get.put(AuthenticationController());
+    final AuthenticationController _authenticationController = Get.put(AuthenticationController());
 
     return Scaffold(
       body: Container(
@@ -29,7 +29,6 @@ class LoginPage extends StatelessWidget {
         ),
         child: Stack(
           children: [
-            // Bulat atas di kiri atas
             Positioned(
               top: 0,
               left: -13,
@@ -39,8 +38,6 @@ class LoginPage extends StatelessWidget {
                 child: Image.asset('assets/images/bulatatas.png'),
               ),
             ),
-
-            // Logo di tengah atas
             Align(
               alignment: const Alignment(0, -0.75),
               child: Image.asset(
@@ -49,8 +46,6 @@ class LoginPage extends StatelessWidget {
                 height: 190,
               ),
             ),
-
-            // Form di bawah logo dengan border radius
             Align(
               alignment: Alignment.bottomCenter,
               child: Container(
@@ -69,7 +64,6 @@ class LoginPage extends StatelessWidget {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      // Input username
                       TextField(
                         controller: _usernameController,
                         decoration: const InputDecoration(
@@ -78,8 +72,6 @@ class LoginPage extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 20),
-
-                      // Input password
                       TextField(
                         controller: _passwordController,
                         obscureText: true,
@@ -89,21 +81,25 @@ class LoginPage extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 20),
-
-                      // Remember me and login button
                       Row(
                         children: [
-                          Checkbox(value: false, onChanged: (value) {}),
+                          Obx(() {
+                            return Checkbox(
+                              value: rememberMe.value,
+                              onChanged: (value) {
+                                rememberMe.value = value!;
+                              },
+                            );
+                          }),
                           const Text("Remember me?"),
                           const Spacer(),
                           ElevatedButton(
                             onPressed: () async {
-                              // Panggil fungsi login
                               await _authenticationController.login(
                                 username: _usernameController.text.trim(),
                                 password: _passwordController.text.trim(),
+                                rememberMe: rememberMe.value, // Mengirimkan status remember me
                               );
-                              // Tidak perlu lagi menulis navigasi di sini, karena sudah diatur di fungsi login
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.blue,
@@ -116,11 +112,8 @@ class LoginPage extends StatelessWidget {
                                   : const Text('Log in');
                             }),
                           ),
-
                         ],
                       ),
-                      const SizedBox(height: 20),
-
                       // Divider with text
                       Row(
                         children: <Widget>[
