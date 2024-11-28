@@ -24,6 +24,9 @@ class _ProfileDashboardState extends State<ProfileDashboard> {
       setState(() {
         userName = userData['name'];
       });
+    } else {
+      debugPrint("No user data found in GetStorage");
+      userName = "User"; // Default name if no user data is found
     }
   }
 
@@ -49,32 +52,28 @@ class _ProfileDashboardState extends State<ProfileDashboard> {
     );
   }
 
-  void onPolicyTap() {
-    print("Policy diklik");
+  void onMenuTap(int index) {
+    if (index == 0) {
+      Navigator.pushReplacement(
+        context,
+        PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) => HomeScreen(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            var begin = Offset(-1.0, 0.0);
+            var end = Offset.zero;
+            var curve = Curves.ease;
+            var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+            return SlideTransition(position: animation.drive(tween), child: child);
+          },
+        ),
+      );
+    }
   }
 
-  void onMenuTap(int index) {
-    setState(() {
-      if (index == 0) {
-        Navigator.pushReplacement(
-          context,
-          PageRouteBuilder(
-            pageBuilder: (context, animation, secondaryAnimation) => HomeScreen(),
-            transitionsBuilder: (context, animation, secondaryAnimation, child) {
-              var begin = Offset(-1.0, 0.0);
-              var end = Offset.zero;
-              var curve = Curves.ease;
-              var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-              return SlideTransition(position: animation.drive(tween), child: child);
-            },
-          ),
-        );
-      } else if (index == 3) {
-        // Do nothing as we are already on the ProfileDashboard
-      } else {
-        // Handle other menu actions here if needed
-      }
-    });
+  Future<void> onLogoutTap() async {
+    await AuthenticationController().logout();
+    // Redirect user to login page after logout
+    Navigator.pushReplacementNamed(context, '/login');
   }
 
   @override
@@ -90,11 +89,11 @@ class _ProfileDashboardState extends State<ProfileDashboard> {
           SizedBox(height: 60),
           CircleAvatar(
             radius: 50,
-            backgroundImage: AssetImage('assets/profile_image.png'), // Tambahkan gambar profil di folder assets
+            backgroundImage: AssetImage('assets/images/profile_image.png'), // Profile image asset
           ),
           SizedBox(height: 10),
           Text(
-            'Hi, ${userName ?? "User"}',  // Display the user's name dynamically
+            'Hi, ${userName ?? "User"}', // Display the user's name dynamically
             style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 20),
@@ -115,7 +114,7 @@ class _ProfileDashboardState extends State<ProfileDashboard> {
                         'Siap untuk petualangan baru hari ini?',
                         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                       ),
-                      Text('kami siap menemani perjalananmu'),
+                      Text('Kami siap menemani perjalananmu'),
                     ],
                   ),
                 ),
@@ -176,9 +175,7 @@ class _ProfileDashboardState extends State<ProfileDashboard> {
                       Icons.arrow_forward_ios,
                       color: Colors.black,
                     ),
-                    onTap: () {
-                      AuthenticationController().logout();  // Call the logout function
-                    },
+                    onTap: onLogoutTap, // Call the logout function
                   ),
                 ],
               ),

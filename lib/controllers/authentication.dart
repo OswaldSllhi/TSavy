@@ -97,22 +97,25 @@ Future<void> login({
       body: data,
     );
 
-    if (response.statusCode == 200) {
-      var responseData = json.decode(response.body);
+if (response.statusCode == 200) {
+  var responseData = json.decode(response.body);
 
-      if (responseData.containsKey('token')) {
-        token.value = responseData['token'];
+  if (responseData.containsKey('token')) {
+    token.value = responseData['token'];
 
-        if (rememberMe) {
-          // Jika rememberMe aktif, simpan token secara permanen
-          box.write('token', token.value);
-        }
+    // Simpan informasi user di GetStorage
+    box.write('token', token.value);
+    box.write('user', responseData['user']); // Simpan data user (seperti username)
 
-        Get.offAll(() => HomeScreen());
-      } else {
-        Get.snackbar('Error', 'Login successful, but no token found.');
-      }
-    } else {
+    if (rememberMe) {
+      box.write('rememberMe', true);
+    }
+
+    Get.offAll(() => HomeScreen());
+  } else {
+    Get.snackbar('Error', 'Login successful, but no token found.');
+  }
+} else {
       Get.snackbar('Error', 'Invalid username or password.');
     }
   } catch (e) {
