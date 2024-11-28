@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:travel_savy/page/rekamperjalanan.dart';
 
 class TulisCerita extends StatelessWidget {
   const TulisCerita({super.key});
@@ -40,7 +41,8 @@ class TulisCerita extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 20), // Menambahkan jarak antara teks dan gambar
+                  SizedBox(
+                      height: 20), // Menambahkan jarak antara teks dan gambar
                   Image.asset(
                     'assets/images/p.png', // Pastikan ilustrasi sesuai
                     height: 202, // Sesuaikan ukuran gambar
@@ -67,11 +69,13 @@ class TulisCerita extends StatelessWidget {
                 height: 30,
                 child: ElevatedButton(
                   onPressed: () {
-                    // Action untuk tombol
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) =>  TulisCerita()));
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xFF277BC0), // Warna tombol
-                    foregroundColor: Colors.white, // Mengubah warna font tombol menjadi hitam
+                    foregroundColor: Colors
+                        .white, // Mengubah warna font tombol menjadi hitam
                   ),
                   child: Text(
                     'Buat Cerita',

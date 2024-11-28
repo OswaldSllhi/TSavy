@@ -6,8 +6,8 @@ import 'package:travel_savy/constants/constants.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:travel_savy/page/home_screen.dart';
 import 'package:travel_savy/page/splash.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+// import 'package:google_sign_in/google_sign_in.dart';
+// import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
 class AuthenticationController extends GetxController {
   final isLoading = false.obs;

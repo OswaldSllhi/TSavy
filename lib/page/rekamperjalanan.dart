@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:travel_savy/page/tulisceritamu.dart';
+import 'package:get/get.dart';
+import 'package:travel_savy/controllers/ceritacontroller.dart';
+import 'package:travel_savy/page/tulis_cerita.dart';
 import 'bottom_nav.dart';
 
 class MyApp extends StatelessWidget {
@@ -21,15 +23,14 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  final List<Map<String, String>> stories = List.generate(5, (index) => {
-    "title": "Kota ",
-    "destination": "Japan",
-    "content":
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    "image": "assets/images/cerita.png"
-  });
-
+  final CeritaController ceritaController = Get.put(CeritaController()); // Inisialisasi CeritaController
   int _selectedIndex = 1; // Indeks untuk halaman rekam perjalanan
+
+  @override
+  void initState() {
+    super.initState();
+    ceritaController.fetchCeritas(); // Fetch cerita dari API saat init
+  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -56,51 +57,63 @@ class _DashboardScreenState extends State<DashboardScreen> {
             SizedBox(height: 8),
             ElevatedButton(
               onPressed: () {
-                          // Navigate to Register Page
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const TulisCerita(),
-                            ),
-                          );
-                        },
+                // Navigate to TulisCerita Page
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>  TulisCerita(),
+                  ),
+                );
+              },
               child: Text("Tulis Ceritamu"),
             ),
             Expanded(
-              child: ListView.builder(
-                itemCount: stories.length,
-                itemBuilder: (context, index) {
-                  final story = stories[index];
-                  return GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => StoryDetailScreen(story: story),
-                        ),
-                      );
-                    },
-                    child: Card(
-                      child: ListTile(
-                        leading: Image.asset(
-                          story["image"]!,
-                          width: 150,
-                          height: 150,
-                          fit: BoxFit.cover,
-                        ),
-                        title: Text(story["title"]!),
-                        subtitle: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(story["content"]!),
-                            Text('Tujuan: ${story["destination"]}'),
-                          ],
+              child: Obx(() {
+                if (ceritaController.isLoading.value) {
+                  return Center(child: CircularProgressIndicator());
+                }
+
+                if (ceritaController.ceritas.isEmpty) {
+                  return Center(child: Text('Tidak ada cerita tersedia.'));
+                }
+
+                return ListView.builder(
+                  itemCount: ceritaController.ceritas.length,
+                  itemBuilder: (context, index) {
+                    final story = ceritaController.ceritas[index];
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => StoryDetailScreen(story: story),
+                          ),
+                        );
+                      },
+                      child: Card(
+                        child: ListTile(
+                          leading: story["image"] != null
+                              ? Image.network(
+                                  story["image"],
+                                  width: 80,
+                                  height: 80,
+                                  fit: BoxFit.cover,
+                                )
+                              : Icon(Icons.image, size: 80),
+                          title: Text(story["title"] ?? 'Tanpa Judul'),
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(story["content"] ?? 'Konten tidak tersedia'),
+                              Text('Tujuan: ${story["destination"] ?? "Tidak disebutkan"}'),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                },
-              ),
+                    );
+                  },
+                );
+              }),
             ),
           ],
         ),
@@ -114,7 +127,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 }
 
 class StoryDetailScreen extends StatelessWidget {
-  final Map<String, String> story;
+  final Map<String, dynamic> story;
 
   StoryDetailScreen({required this.story});
 
@@ -134,7 +147,7 @@ class StoryDetailScreen extends StatelessWidget {
             onPressed: () {
               Navigator.of(context).pop(); // Tutup dialog
               Navigator.of(context).pop(); // Kembali ke halaman sebelumnya
-              // Logika penghapusan dapat disesuaikan jika perlu
+              // Logika penghapusan cerita
             },
             child: Text("Yes"),
           ),
@@ -147,28 +160,30 @@ class StoryDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(story["title"]!),
+        title: Text(story["title"] ?? 'Tanpa Judul'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Image.asset(
-              story["image"]!,
-              width: double.infinity,
-              fit: BoxFit.cover,
-            ),
+            story["image"] != null
+                ? Image.network(
+                    story["image"],
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                  )
+                : Icon(Icons.image, size: 200),
             SizedBox(height: 16),
             Text(
-              story["title"]!,
+              story["title"] ?? 'Tanpa Judul',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 8),
-            Text('Tujuan: ${story["destination"]}'),
+            Text('Tujuan: ${story["destination"] ?? "Tidak disebutkan"}'),
             SizedBox(height: 16),
             Text(
-              story["content"]! * 3, // Menampilkan konten lebih panjang
+              story["content"] ?? 'Konten tidak tersedia',
               textAlign: TextAlign.justify,
             ),
             SizedBox(height: 16),
