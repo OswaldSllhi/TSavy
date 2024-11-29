@@ -33,7 +33,7 @@ class AuthenticationController extends GetxController {
       };
 
       var response = await http.post(
-        Uri.parse(url + 'register'), // URL register API
+        Uri.parse(baseUrl + 'register'), // URL register API
         headers: {
           'Accept': 'application/json',
         },
@@ -90,7 +90,7 @@ Future<void> login({
     };
 
     var response = await http.post(
-      Uri.parse('${url}login'),
+      Uri.parse('${baseUrl}login'),
       headers: {
         'Accept': 'application/json',
       },
@@ -140,7 +140,7 @@ Future<void> logout() async {
 
     // Send logout request to the backend
     var response = await http.post(
-      Uri.parse('${url}logout'), // Replace with your correct logout URL
+      Uri.parse('${baseUrl}logout'), // Replace with your correct logout URL
       headers: {
         'Accept': 'application/json',
         'Authorization': 'Bearer $storedToken',

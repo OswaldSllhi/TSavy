@@ -23,7 +23,7 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  final CeritaController ceritaController = Get.put(CeritaController()); // Inisialisasi CeritaController
+  final ceritacontroller ceritaController = Get.put(ceritacontroller()); // Inisialisasi CeritaController
   int _selectedIndex = 1; // Indeks untuk halaman rekam perjalanan
 
   @override

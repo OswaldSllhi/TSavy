@@ -5,24 +5,30 @@ import 'package:http/http.dart' as http;
 import 'package:get_storage/get_storage.dart';
 import '../constants/constants.dart';
 
-class CeritaController extends GetxController {
+class ceritacontroller extends GetxController {
   var cities = <Map<String, dynamic>>[].obs;
-  var isLoading = false.obs; // Observable untuk status loading
-  var ceritas = <Map<String, dynamic>>[].obs; // Observable untuk daftar cerita
+  var isLoading = false.obs;
+  var ceritas = <Map<String, dynamic>>[].obs;
   final box = GetStorage();
 
+  // Fetch cities data
   Future<void> fetchCities() async {
     try {
       final response = await http.get(
-        Uri.parse('${url}cities'), // API untuk mendapatkan daftar kota
-        headers: {
-          'Accept': 'application/json',
-        },
+        Uri.parse('${baseUrl}cities'),
+        headers: {'Accept': 'application/json'},
       );
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
-        cities.value = List<Map<String, dynamic>>.from(data['data']);
+        if (data['data'] != null && data['data'] is List) {
+          cities.value = List<Map<String, dynamic>>.from(data['data'].map((city) => {
+                'id': city['id'],
+                'name': city['city_name'], // Pastikan sesuai dengan key API
+              }));
+        } else {
+          Get.snackbar('Error', 'Data kota tidak ditemukan');
+        }
       } else {
         Get.snackbar('Error', 'Gagal memuat data kota');
       }
@@ -31,17 +37,15 @@ class CeritaController extends GetxController {
     }
   }
 
-
-
-  // Fungsi untuk mengambil cerita dari API
+  // Fetch cerita data
   Future<void> fetchCeritas() async {
     try {
-      isLoading.value = true; // Set loading ke true
+      isLoading.value = true;
       final response = await http.get(
-        Uri.parse('${url}ceritas'), // Pastikan endpoint API benar
+        Uri.parse('${baseUrl}ceritas'),
         headers: {
           'Accept': 'application/json',
-          'Authorization': 'Bearer ${box.read('token')}', // Jika menggunakan token
+          'Authorization': 'Bearer ${box.read('token')}',
         },
       );
 
@@ -54,52 +58,17 @@ class CeritaController extends GetxController {
     } catch (e) {
       Get.snackbar('Error', 'Terjadi kesalahan: $e');
     } finally {
-      isLoading.value = false; // Set loading ke false
+      isLoading.value = false;
     }
   }
 
-  /// Tambahkan cerita baru
-Future<bool> addCerita({
-  required String title,
-  required String content,
-  String? imagePath,
-  required int cityId, // Menambahkan cityId sebagai parameter
-}) async {
-  try {
-    final String? token = box.read('token');
-
-    if (token == null) {
-      Get.snackbar('Error', 'No token found, please login again.');
-      return false;
-    }
-
-    var request = http.MultipartRequest('POST', Uri.parse('${url}ceritas'));
-    request.headers['Authorization'] = 'Bearer $token';
-    request.fields['title'] = title;
-    request.fields['content'] = content;
-    request.fields['city_id'] = cityId.toString(); // Mengirimkan city_id
-
-    if (imagePath != null) {
-      request.files.add(await http.MultipartFile.fromPath('image', imagePath));
-    }
-
-    var response = await request.send();
-    if (response.statusCode == 201) {
-      debugPrint('Cerita berhasil ditambahkan.');
-      return true;
-    } else {
-      debugPrint('Failed to add story: ${response.statusCode}');
-      return false;
-    }
-  } catch (e) {
-    debugPrint('Error adding story: $e');
-    return false;
-  }
-}
-
-
-  /// Hapus cerita
-  Future<bool> deleteCerita(int id) async {
+  // Add cerita
+  Future<bool> addCerita({
+    required String title,
+    required String content,
+    String? imagePath,
+    required int cityId,
+  }) async {
     try {
       final String? token = box.read('token');
 
@@ -108,23 +77,29 @@ Future<bool> addCerita({
         return false;
       }
 
-      var response = await http.delete(
-        Uri.parse('${url}ceritas/$id'),
-        headers: {
-          'Authorization': 'Bearer $token',
-          'Accept': 'application/json',
-        },
-      );
+      var request = http.MultipartRequest('POST', Uri.parse('${baseUrl}ceritas'));
+      request.headers['Authorization'] = 'Bearer $token';
+      request.fields['title'] = title;
+      request.fields['content'] = content;
+      request.fields['city_id'] = cityId.toString();
 
-      if (response.statusCode == 200) {
-        debugPrint('Cerita berhasil dihapus.');
+      if (imagePath != null) {
+        request.files.add(await http.MultipartFile.fromPath('image', imagePath));
+      }
+
+      var response = await request.send();
+      if (response.statusCode == 201) {
+        Get.snackbar('Success', 'Cerita berhasil ditambahkan');
+        fetchCeritas(); // Perbarui daftar cerita
         return true;
       } else {
-        debugPrint('Failed to delete story: ${response.body}');
+        final resBody = await response.stream.bytesToString();
+        debugPrint('Failed to add story: $resBody');
+        Get.snackbar('Error', 'Gagal menambahkan cerita');
         return false;
       }
     } catch (e) {
-      debugPrint('Error deleting story: $e');
+      debugPrint('Error adding story: $e');
       return false;
     }
   }

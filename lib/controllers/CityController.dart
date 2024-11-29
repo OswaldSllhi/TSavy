@@ -1,48 +1,41 @@
 import 'dart:convert';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:get_storage/get_storage.dart';
 import '../constants/constants.dart';
 
 class CityController extends GetxController {
-  var cities = <Map<String, dynamic>>[].obs;
-  var isLoading = false.obs; // Define isLoading as an observable variable
+  var cities = <Map<String, dynamic>>[].obs; // Daftar kota yang diambil dari API
+  var isLoading = false.obs; // Status untuk menandakan loading
 
-  // Fetch cities from the API
+  // Fetch cities dari API
   Future<void> fetchCities() async {
+    isLoading.value = true; // Mulai loading
     try {
       final response = await http.get(
-        Uri.parse('${url}cities'),
-        headers: {
-          'Accept': 'application/json',
-        },
+        Uri.parse('${baseUrl}cities'), // Pastikan endpoint ini benar
+        headers: {'Accept': 'application/json'},
       );
-
-      print('API Response Status: ${response.statusCode}');
-      print('API Response Body: ${response.body}');
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
-        if (data['data'] != null) {
-          // Update the field names to match the API response
-          cities.value =
-              List<Map<String, dynamic>>.from(data['data'].map((city) => {
-                    'name': city['city_name'], // Mapping 'city_name' to 'name'
-                    'image':
-                        city['image_url'], // Mapping 'image_url' to 'image'
-                    'id': city['id'], // Keep the city 'id'
-                  }));
-          print('Cities fetched: ${cities.value}');
+        if (data['data'] != null && data['data'] is List) {
+          cities.value = List<Map<String, dynamic>>.from(
+            data['data'].map((city) => {
+              'id': city['id'], // ID kota
+              'name': city['city_name'], // Nama kota
+              'image': city['image'], // URL gambar kota
+            }),
+          );
         } else {
-          Get.snackbar('Error', 'Data kota tidak ditemukan');
+          Get.snackbar('Error', 'Data kota tidak ditemukan.');
         }
       } else {
-        Get.snackbar('Error', 'Gagal memuat data kota');
+        Get.snackbar('Error', 'Gagal memuat data kota.');
       }
     } catch (e) {
-      print('Error fetching cities: $e');
       Get.snackbar('Error', 'Terjadi kesalahan: $e');
+    } finally {
+      isLoading.value = false; // Selesai loading
     }
   }
 }
