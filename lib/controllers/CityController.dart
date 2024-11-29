@@ -1,41 +1,43 @@
-import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import '../constants/constants.dart';
+import 'dart:convert';
+
+import 'package:travel_savy/constants/constants.dart';
 
 class CityController extends GetxController {
-  var cities = <Map<String, dynamic>>[].obs; // Daftar kota yang diambil dari API
-  var isLoading = false.obs; // Status untuk menandakan loading
+  var cities = [].obs;
+  var isLoading = false.obs;
 
-  // Fetch cities dari API
   Future<void> fetchCities() async {
-    isLoading.value = true; // Mulai loading
+    isLoading.value = true;
+
     try {
+      final token = getToken();
       final response = await http.get(
-        Uri.parse('${baseUrl}cities'), // Pastikan endpoint ini benar
-        headers: {'Accept': 'application/json'},
+        Uri.parse('${baseUrl}cities'),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
       );
 
       if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        if (data['data'] != null && data['data'] is List) {
-          cities.value = List<Map<String, dynamic>>.from(
-            data['data'].map((city) => {
-              'id': city['id'], // ID kota
-              'name': city['city_name'], // Nama kota
-              'image': city['image'], // URL gambar kota
-            }),
-          );
+        final result = jsonDecode(response.body);
+        if (result['success'] == true) {
+          cities.value = result['data'];
         } else {
-          Get.snackbar('Error', 'Data kota tidak ditemukan.');
+          Get.snackbar('Error', 'Respon API gagal: ${result['message']}');
         }
       } else {
-        Get.snackbar('Error', 'Gagal memuat data kota.');
+        Get.snackbar(
+          'Error',
+          'Gagal memuat data kota: ${response.statusCode}\n${response.body}',
+        );
       }
     } catch (e) {
       Get.snackbar('Error', 'Terjadi kesalahan: $e');
     } finally {
-      isLoading.value = false; // Selesai loading
+      isLoading.value = false;
     }
   }
 }

@@ -103,4 +103,37 @@ class ceritacontroller extends GetxController {
       return false;
     }
   }
+
+  // Destroy cerita
+  Future<bool> destroyCerita(int ceritaId) async {
+    try {
+      final String? token = box.read('token');
+
+      if (token == null) {
+        Get.snackbar('Error', 'No token found, please login again.');
+        return false;
+      }
+
+      final response = await http.delete(
+        Uri.parse('${baseUrl}ceritas/$ceritaId'),
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 204) {
+        Get.snackbar('Success', 'Cerita berhasil dihapus');
+        fetchCeritas(); // Perbarui daftar cerita
+        return true;
+      } else {
+        debugPrint('Failed to delete story: ${response.body}');
+        Get.snackbar('Error', 'Gagal menghapus cerita');
+        return false;
+      }
+    } catch (e) {
+      debugPrint('Error deleting story: $e');
+      return false;
+    }
+  }
 }

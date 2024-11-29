@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:get/get.dart';
-import '../controllers/ceritacontroller.dart';
+import 'package:travel_savy/controllers/ceritacontroller.dart';
+import 'package:travel_savy/controllers/CityController.dart'; // Controller untuk kota
 
 class TulisCerita extends StatefulWidget {
   @override
@@ -12,12 +13,14 @@ class _TulisCeritaState extends State<TulisCerita> {
   final _judulController = TextEditingController();
   final _ceritaController = TextEditingController();
   String? _selectedKota;
-  final ceritacontroller ceritaController = Get.find();
+
+  final CityController cityController = Get.put(CityController());
+  final ceritacontroller ceritaController = Get.put(ceritacontroller());
 
   @override
   void initState() {
     super.initState();
-    ceritaController.fetchCities();
+    cityController.fetchCities();
   }
 
   @override
@@ -46,9 +49,12 @@ class _TulisCeritaState extends State<TulisCerita> {
             ),
             SizedBox(height: 16),
             Obx(() {
+              if (cityController.isLoading.value) {
+                return Center(child: CircularProgressIndicator());
+              }
               return DropdownSearch<String>(
-                items: ceritaController.cities
-                    .map((city) => city['name'].toString())
+                items: cityController.cities
+                    .map((city) => city['city_name'].toString())
                     .toList(),
                 dropdownDecoratorProps: DropDownDecoratorProps(
                   dropdownSearchDecoration: InputDecoration(
@@ -70,9 +76,10 @@ class _TulisCeritaState extends State<TulisCerita> {
                 if (_judulController.text.isNotEmpty &&
                     _ceritaController.text.isNotEmpty &&
                     _selectedKota != null) {
-                  int cityId = ceritaController.cities
-                      .firstWhere((city) => city['name'] == _selectedKota)['id'];
+                  int cityId = cityController.cities
+                      .firstWhere((city) => city['city_name'] == _selectedKota)['id'];
 
+                  // Gunakan CeritaController untuk menambah cerita
                   bool success = await ceritaController.addCerita(
                     title: _judulController.text,
                     content: _ceritaController.text,
@@ -80,7 +87,10 @@ class _TulisCeritaState extends State<TulisCerita> {
                   );
 
                   if (success) {
+                    Get.snackbar('Success', 'Cerita berhasil ditambahkan');
                     Navigator.pop(context);
+                  } else {
+                    Get.snackbar('Error', 'Gagal menambahkan cerita');
                   }
                 } else {
                   Get.snackbar('Error', 'Mohon lengkapi semua field');
