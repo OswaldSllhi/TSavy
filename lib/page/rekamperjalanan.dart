@@ -131,30 +131,39 @@ class StoryDetailScreen extends StatelessWidget {
 
   StoryDetailScreen({required this.story});
 
-  void _showDeleteConfirmationDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text("Are you sure to delete this story?"),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop(); // Tutup dialog jika "No" dipilih
-            },
-            child: Text("No"),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop(); // Tutup dialog
+  // Fungsi untuk menampilkan dialog konfirmasi penghapusan
+void _showDeleteConfirmationDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: Text("Are you sure to delete this story?"),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop(); // Tutup dialog jika "No" dipilih
+          },
+          child: Text("No"),
+        ),
+        TextButton(
+          onPressed: () async {
+            // Menutup dialog konfirmasi
+            Navigator.of(context).pop(); 
+
+            // Memanggil fungsi untuk menghapus cerita dan mengarahkan ke halaman rekam perjalanan
+            bool isDeleted = await Get.find<ceritacontroller>().destroyCerita(story['id'], context);
+            
+            // Kembali ke halaman sebelumnya setelah cerita dihapus
+            if (isDeleted) {
               Navigator.of(context).pop(); // Kembali ke halaman sebelumnya
-              // Logika penghapusan cerita
-            },
-            child: Text("Yes"),
-          ),
-        ],
-      ),
-    );
-  }
+            }
+          },
+          child: Text("Yes"),
+        ),
+      ],
+    ),
+  );
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -189,7 +198,7 @@ class StoryDetailScreen extends StatelessWidget {
             SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
-                _showDeleteConfirmationDialog(context);
+                _showDeleteConfirmationDialog(context); // Memanggil dialog konfirmasi
               },
               style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
               child: Text("Hapus Cerita ini ?"),
@@ -200,3 +209,4 @@ class StoryDetailScreen extends StatelessWidget {
     );
   }
 }
+

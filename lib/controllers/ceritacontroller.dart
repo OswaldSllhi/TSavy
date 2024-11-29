@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:get_storage/get_storage.dart';
+import 'package:travel_savy/page/rekamperjalanan.dart';
 import '../constants/constants.dart';
 
 class ceritacontroller extends GetxController {
@@ -104,36 +105,47 @@ class ceritacontroller extends GetxController {
     }
   }
 
-  // Destroy cerita
-  Future<bool> destroyCerita(int ceritaId) async {
-    try {
-      final String? token = box.read('token');
-
-      if (token == null) {
-        Get.snackbar('Error', 'No token found, please login again.');
-        return false;
-      }
-
-      final response = await http.delete(
-        Uri.parse('${baseUrl}ceritas/$ceritaId'),
-        headers: {
-          'Accept': 'application/json',
-          'Authorization': 'Bearer $token',
-        },
-      );
-
-      if (response.statusCode == 200 || response.statusCode == 204) {
-        Get.snackbar('Success', 'Cerita berhasil dihapus');
-        fetchCeritas(); // Perbarui daftar cerita
-        return true;
-      } else {
-        debugPrint('Failed to delete story: ${response.body}');
-        Get.snackbar('Error', 'Gagal menghapus cerita');
-        return false;
-      }
-    } catch (e) {
-      debugPrint('Error deleting story: $e');
+// delete cerita
+Future<bool> destroyCerita(int ceritaId, BuildContext context) async {
+  try {
+    final String? token = box.read('token');
+    
+    if (token == null) {
+      Get.snackbar('Error', 'No token found, please login again.');
       return false;
     }
+
+    final response = await http.delete(
+      Uri.parse('${baseUrl}ceritas/$ceritaId'),
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 204) {
+      Get.snackbar('Success', 'Cerita berhasil dihapus');
+      fetchCeritas(); // Perbarui daftar cerita
+
+      // Kembali ke halaman utama (rekam perjalanan)
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => DashboardScreen()),
+        (route) => false, // Menutup semua halaman sebelumnya
+      );
+
+
+      return true;
+    } else {
+      debugPrint('Failed to delete story: ${response.body}');
+      Get.snackbar('Error', 'Gagal menghapus cerita');
+      return false;
+    }
+  } catch (e) {
+    debugPrint('Error deleting story: $e');
+    return false;
   }
+}
+
+
 }
