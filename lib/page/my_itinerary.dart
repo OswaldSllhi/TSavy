@@ -1,40 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:travel_savy/page/itinerary_2.dart';
-//import 'generate_itinerary.dart';
 import 'package:travel_savy/page/itinerary_schedule.dart';
-//import 'itinerary_schedule.dart';
-
-// void main() {
-//   runApp(MyApp());
-// }
-//
-// class MyApp extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       debugShowCheckedModeBanner: false,
-//       title: 'My Itinerary',
-//       theme: ThemeData(
-//         primarySwatch: Colors.blue,
-//       ),
-//       home: MyItinerary(),
-//     );
-//   }
-// }
+import 'package:travel_savy/page/profile_dashboard.dart';
 
 class MyItinerary extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('My Itinerary', style: TextStyle(color: Colors.black)),
+        // backgroundColor: Colors.white,
+        backgroundColor: Colors.blue[800],
+        title: Text('My Itinerary', style: TextStyle(color: Colors.white)),
         centerTitle: true,
-        backgroundColor: Colors.white,
         elevation: 1,
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
             // Tambahkan navigasi jika dibutuhkan
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ProfileDashboard()),
+            );
           },
         ),
       ),
@@ -65,7 +51,7 @@ class MyItinerary extends StatelessWidget {
                         top: Radius.circular(12),
                       ),
                       child: Image.asset(
-                        'assets/Shibuya.png', // Ganti sesuai dengan nama gambar Anda
+                        'assets/images/Shibuya.png', // Ganti sesuai dengan nama gambar Anda
                         height: 200,
                         width: double.infinity,
                         fit: BoxFit.cover,
@@ -124,7 +110,10 @@ class MyItinerary extends StatelessWidget {
                 ),
                 child: Text(
                   'Buat Itinerary baru',
-                  style: TextStyle(fontSize: 16),
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                  ),
                 ),
               ),
             ),

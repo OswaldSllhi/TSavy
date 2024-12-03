@@ -1,17 +1,5 @@
 import 'package:flutter/material.dart';
-
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: TravelPlannerPage(),
-    );
-  }
-}
+import 'package:travel_savy/page/itinerary_list.dart';
 
 class TravelPlannerPage extends StatefulWidget {
   @override
@@ -75,37 +63,37 @@ class _TravelPlannerPageState extends State<TravelPlannerPage> {
                     child: Center(
                       child: Center(
                           child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Atur Kenyamanan\nPerjalananmu',
-                            style: TextStyle(
-                              fontFamily: 'Arsenal',
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                              fontSize: 28.3,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                          Text(
-                            '#BersamaTravelSavy',
-                            style: TextStyle(
-                              fontFamily: 'Arsenal',
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                              fontSize: 10,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      )),
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Atur Kenyamanan\nPerjalananmu',
+                                style: TextStyle(
+                                  fontFamily: 'Arsenal',
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                  fontSize: 28.3,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              Text(
+                                '#BersamaTravelSavy',
+                                style: TextStyle(
+                                  fontFamily: 'Arsenal',
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                  fontSize: 10,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          )),
                     ),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(0.0),
                   child: Image.asset(
-                    'assets/image/lingkaran.png',
+                    'assets/images/lingkaran.png',
                     height: 100.0,
                     width: 50.0,
                     fit: BoxFit.cover,
@@ -196,8 +184,16 @@ class _TravelPlannerPageState extends State<TravelPlannerPage> {
             Center(
               child: ElevatedButton(
                 onPressed: () {
-                  print('Generate data perjalanan...');
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ItineraryPage(),
+                    ),
+                  );
                 },
+                // onPressed: () {
+                //   //print('Generate data perjalanan...');
+                // },
                 child: Text(
                   'GENERATE',
                   style: TextStyle(color: Colors.white),

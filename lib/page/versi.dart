@@ -6,7 +6,8 @@ class VersionScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.blue[800],
+        // backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.black),
@@ -14,10 +15,11 @@ class VersionScreen extends StatelessWidget {
         ),
         title: Text(
           'Versi',
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: Colors.white),
         ),
         centerTitle: true,
       ),
+      backgroundColor: Colors.white,
       body: Column(
         children: [
           ListTile(

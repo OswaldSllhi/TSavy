@@ -12,15 +12,16 @@ class VersionUpdate extends StatelessWidget {
           onPressed: () => Navigator.pop(context),
         ),
       ),
+      backgroundColor: Colors.white,
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        //mainAxisAlignment: MainAxisAlignment.center,
         children: [
           // Logo di tengah
           Center(
             child: Column(
               children: [
                 Image.asset(
-                  'assets/images/logo.png', // Ganti dengan path gambar Anda
+                  'assets/images/logo_versi.png', // Ganti dengan path gambar Anda
                   height: 300,
                   width: 300,
                 ),
@@ -28,7 +29,7 @@ class VersionUpdate extends StatelessWidget {
                   'Versi 2.8.2',
                   style: TextStyle(
                     fontSize: 16,
-                    color: Colors.grey,
+                    color: Colors.black,
                   ),
                 ),
               ],

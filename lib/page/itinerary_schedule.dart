@@ -1,30 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:travel_savy/page/itinerary_list.dart';
 
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: ItinerarySchedulePage(), // Atur halaman pertama
-    );
-  }
-}
-
 class ItinerarySchedulePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.blue[800],
         elevation: 0,
         title: Text(
           'My Itinerary',
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
       ),
@@ -34,7 +20,7 @@ class ItinerarySchedulePage extends StatelessWidget {
           Stack(
             children: [
               Image.asset(
-                'assets/Shibuya.png',
+                'assets/images/Shibuya.png',
                 width: double.infinity,
                 height: 200,
                 fit: BoxFit.cover,
@@ -86,7 +72,19 @@ class ItinerarySchedulePage extends StatelessWidget {
                   activity: 'Bakery at Anderson Tokyu',
                   time: '8.30am',
                   onTap: () {
-                    // Navigasi langsung ke ItineraryPage
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ItineraryPage(),
+                      ),
+                    );
+                  },
+                ),
+                ItineraryCard(
+                  day: 'Day 2',
+                  activity: 'Visit Shibuya Crossing',
+                  time: '10.00am',
+                  onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -109,12 +107,14 @@ class ItineraryCard extends StatelessWidget {
   final String activity;
   final String time;
   final VoidCallback onTap;
+  final Color backgroundColor;
 
   const ItineraryCard({
     required this.day,
     required this.activity,
     required this.time,
     required this.onTap,
+    this.backgroundColor = Colors.blue, // Default warna biru
   });
 
   @override
@@ -125,13 +125,26 @@ class ItineraryCard extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
       ),
+      color: backgroundColor, // Gunakan warna latar dari properti
       child: ListTile(
         title: Text(
           day,
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.white, // Teks putih untuk kontras
+          ),
         ),
-        subtitle: Text('$activity\n$time'),
-        trailing: Icon(Icons.arrow_forward_ios, size: 16),
+        subtitle: Text(
+          '$activity\n$time',
+          style: TextStyle(
+            color: Colors.white70, // Teks subtitle dengan transparansi
+          ),
+        ),
+        trailing: Icon(
+          Icons.arrow_forward_ios,
+          size: 16,
+          color: Colors.white, // Ikon putih untuk kontras
+        ),
         onTap: onTap,
       ),
     );

@@ -1,41 +1,38 @@
 import 'package:flutter/material.dart';
 
-// void main() {
-//   runApp(MyApp());
-// }
-//
-// class MyApp extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       home: EditProfilePage(),
-//     );
-//   }
-// }
-
 class EditProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Edit Profile'),
-        backgroundColor: Colors.blue,
+        // title: Text(
+        //   'Edit Profil',
+        //   style: TextStyle(
+        //     fontFamily: 'Montserrat',
+        //   ),
+        // ),
+        backgroundColor: Colors.blue[800],
       ),
+      backgroundColor: Colors.white,
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
             // Header Profil
             Text(
-              'Profile',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              'Profil',
+              style: TextStyle(
+                  fontSize: 32,
+                  fontFamily: 'Montserrat',
+                  fontWeight: FontWeight.w500),
             ),
             SizedBox(height: 20),
 
             // Foto Profil
             CircleAvatar(
               radius: 50,
-              backgroundImage: AssetImage('assets/your_image.jpg'), // Ganti dengan path gambar yang benar
+              backgroundImage: AssetImage(
+                  'assets/images/oswald.jpg'), // Ganti dengan path gambar yang benar
             ),
             SizedBox(height: 20),
 
@@ -79,7 +76,13 @@ class EditProfilePage extends StatelessWidget {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
                 ),
-                child: Text('Save'),
+                child: Text(
+                  'Save',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                  ),
+                ),
               ),
             ),
           ],

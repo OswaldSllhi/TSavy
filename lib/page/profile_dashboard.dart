@@ -3,6 +3,8 @@ import 'package:get_storage/get_storage.dart';
 import 'package:travel_savy/controllers/authentication.dart';
 import 'package:travel_savy/page/home_screen.dart';
 import 'terms_and_privacy.dart';
+import 'package:travel_savy/page/versi.dart';
+import 'package:travel_savy/page/my_itinerary.dart';
 import 'profile.dart';
 import 'bottom_nav.dart';
 
@@ -37,12 +39,18 @@ class _ProfileDashboardState extends State<ProfileDashboard> {
     );
   }
 
-  void onLanguageTap() {
-    print("Bahasa diklik");
+  void onItineraryTap() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => MyItinerary()),
+    );
   }
 
   void onAppVersionTap() {
-    print("Versi Aplikasi diklik");
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => VersionScreen()),
+    );
   }
 
   void onTermsTap(BuildContext context) {
@@ -62,8 +70,10 @@ class _ProfileDashboardState extends State<ProfileDashboard> {
             var begin = Offset(-1.0, 0.0);
             var end = Offset.zero;
             var curve = Curves.ease;
-            var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-            return SlideTransition(position: animation.drive(tween), child: child);
+            var tween =
+                Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+            return SlideTransition(
+                position: animation.drive(tween), child: child);
           },
         ),
       );
@@ -84,102 +94,152 @@ class _ProfileDashboardState extends State<ProfileDashboard> {
         selectedIndex: 3,
         onTap: onMenuTap,
       ),
-      body: Column(
+      body: Stack(
         children: [
-          SizedBox(height: 60),
-          CircleAvatar(
-            radius: 50,
-            backgroundImage: AssetImage('assets/images/profile_image.png'), // Profile image asset
-          ),
-          SizedBox(height: 10),
-          Text(
-            'Hi, ${userName ?? "User"}', // Display the user's name dynamically
-            style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
-          ),
-          SizedBox(height: 20),
-          Container(
-            margin: EdgeInsets.symmetric(horizontal: 20),
-            padding: EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10),
+          // Gambar kanan.png yang tetap di kanan layar
+          Positioned(
+            top: 0,
+            right: 0,
+            child: Image.asset(
+              'assets/images/kanan.png',
+              scale: 2.5,
             ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Siap untuk petualangan baru hari ini?',
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          ),
+          // Gambar di posisi kiri atas
+          Positioned(
+            top: 0,
+            left: 0,
+            child: Image.asset(
+              'assets/images/kiri.png',
+              width: 100, // Sesuaikan ukuran gambar
+              height: 100, // Sesuaikan ukuran gambar
+              fit: BoxFit.cover,
+            ),
+          ),
+          Column(
+            children: [
+              SizedBox(height: 60),
+              CircleAvatar(
+                radius: 50,
+                backgroundImage: AssetImage(
+                  'assets/images/profile_image.png',
+                ),
+              ),
+              SizedBox(height: 10),
+              Text(
+                'Hi, ${userName ?? "User"}', // Display the user's name dynamically
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 20),
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 20),
+                padding: EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Hai Oswald! Siap untuk petualangan baru hari ini?',
+                            style: TextStyle(
+                              fontFamily: 'Arsenal',
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                          Text(
+                            'Kami siap menemani perjalananmu',
+                            style: TextStyle(
+                              fontFamily: 'Arsenal',
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                        ],
                       ),
-                      Text('Kami siap menemani perjalananmu'),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 20),
+              Expanded(
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
+                    ),
+                  ),
+                  child: ListView(
+                    children: [
+                      ListTile(
+                        leading: Icon(Icons.person),
+                        title: Text(
+                          "Profil",
+                          style: TextStyle(
+                            fontFamily: 'Montserrat',
+                          ),
+                        ),
+                        trailing: Icon(Icons.arrow_forward_ios),
+                        onTap: () {
+                          onProfileTap(context);
+                        },
+                      ),
+                      ListTile(
+                        leading: Image.asset(
+                          'assets/images/my_itinerary.png',
+                          width: 32,
+                          height: 32,
+                        ),
+                        title: Text(
+                          "My Itinerary",
+                          style: TextStyle(
+                            fontFamily: 'Montserrat',
+                          ),
+                        ),
+                        trailing: Icon(Icons.arrow_forward_ios),
+                        onTap: onItineraryTap,
+                      ),
+                      ListTile(
+                        leading: Icon(Icons.privacy_tip),
+                        title: Text(
+                          "Term and Privacy",
+                          style: TextStyle(
+                            fontFamily: 'Montserrat',
+                          ),
+                        ),
+                        trailing: Icon(Icons.arrow_forward_ios),
+                        onTap: () {
+                          onTermsTap(context);
+                        },
+                      ),
+                      ListTile(
+                        leading: Icon(Icons.info),
+                        title: Text(
+                          "Versi Aplikasi",
+                          style: TextStyle(
+                            fontFamily: 'Montserrat',
+                          ),
+                        ),
+                        trailing: Icon(Icons.arrow_forward_ios),
+                        onTap: () {
+                          onAppVersionTap();
+                        },
+                      ),
                     ],
                   ),
                 ),
-              ],
-            ),
-          ),
-          SizedBox(height: 20),
-          Expanded(
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20),
-                ),
               ),
-              child: ListView(
-                children: [
-                  ListTile(
-                    leading: Icon(Icons.person),
-                    title: Text("Profil"),
-                    trailing: Icon(Icons.arrow_forward_ios),
-                    onTap: () {
-                      onProfileTap(context);
-                    },
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.language),
-                    title: Text("Bahasa"),
-                    trailing: Icon(Icons.arrow_forward_ios),
-                    onTap: onLanguageTap,
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.info),
-                    title: Text("Versi Aplikasi"),
-                    trailing: Icon(Icons.arrow_forward_ios),
-                    onTap: onAppVersionTap,
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.privacy_tip),
-                    title: Text("Term and Privacy"),
-                    trailing: Icon(Icons.arrow_forward_ios),
-                    onTap: () {
-                      onTermsTap(context);
-                    },
-                  ),
-                  ListTile(
-                    leading: Icon(
-                      Icons.exit_to_app,
-                      color: Colors.black,
-                    ),
-                    title: Text(
-                      "Log Out",
-                      style: TextStyle(color: Colors.red),
-                    ),
-                    trailing: Icon(
-                      Icons.arrow_forward_ios,
-                      color: Colors.black,
-                    ),
-                    onTap: onLogoutTap, // Call the logout function
-                  ),
-                ],
-              ),
-            ),
+            ],
           ),
         ],
       ),
