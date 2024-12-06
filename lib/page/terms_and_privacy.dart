@@ -1,101 +1,39 @@
 import 'package:flutter/material.dart';
 
-// void main() {
-//   runApp(const MyApp());
-// }
-//
-// class MyApp extends StatelessWidget {
-//   const MyApp({super.key});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       title: 'Flutter Demo',
-//       theme: ThemeData(
-//         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-//         useMaterial3: true,
-//       ),
-//       home: const MyHomePage(),
-//     );
-//   }
-// }
-//
-// class MyHomePage extends StatefulWidget {
-//   const MyHomePage({super.key});
-//
-//   @override
-//   State<MyHomePage> createState() => _MyHomePageState();
-// }
-//
-// class _MyHomePageState extends State<MyHomePage> {
-//   void onTermsTap() {
-//     // Tindakan ketika tombol Term and Privacy diklik
-//     Navigator.push(
-//       context,
-//       MaterialPageRoute(
-//         builder: (context) => const TermsAndPrivacyPage(),
-//       ),
-//     );
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: const Text('Dashboard Profile'),
-//       ),
-//       body: Center(
-//         child: Column(
-//           mainAxisAlignment: MainAxisAlignment.center,
-//           children: <Widget>[
-//             ElevatedButton(
-//               onPressed: onTermsTap,
-//               child: const Text('Term and Privacy'),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-class TermsAndPrivacyPage extends StatelessWidget {
+class TermsAndPrivacyPage extends StatefulWidget {
   const TermsAndPrivacyPage({super.key});
+
+  @override
+  State<TermsAndPrivacyPage> createState() => _TermsAndPrivacyPageState();
+}
+
+class _TermsAndPrivacyPageState extends State<TermsAndPrivacyPage> {
+  int _counter = 0;
+
+  void _incrementCounter() {
+    setState(() {
+      _counter++;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue[800],
-        title: Row(
-          children: [
-            IconButton(
-              icon: const Icon(Icons.chevron_left),
-              onPressed: () {
-                Navigator.of(context).pop(); // Balik ke halaman sebelumnya
-              },
-            ),
-            const Text(
-              'Term and Privacy',
-              style: TextStyle(color: Colors.white),
-              textAlign: TextAlign.left,
-            ),
-            // Container(
-            //   margin: EdgeInsets.symmetric(horizontal: 20),
-            //   padding: EdgeInsets.all(10),
-            //   decoration: BoxDecoration(
-            //   color: Colors.white,
-            //   // borderRadius: BorderRadius.circular(10),
-            // ),
-            // ),
-          ],
-
-        ),
         centerTitle: true,
+        // backgroundColor: Colors.white,
+        title: const Text(
+          'Term and Privacy',
+          style: TextStyle(color: Colors.white),
+        ),
       ),
-      body: Center(
+      body: Container(
+        color: Colors.white,
+
+        padding: const EdgeInsets.symmetric(horizontal: 24.0), //
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start, //
           children: <Widget>[
             const SizedBox(height: 30),
             const Text(
@@ -126,3 +64,4 @@ class TermsAndPrivacyPage extends StatelessWidget {
     );
   }
 }
+

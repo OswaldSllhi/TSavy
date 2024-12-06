@@ -1,5 +1,18 @@
 import 'package:flutter/material.dart';
 
+// void main() {
+//   runApp(MyApp());
+// }
+//
+// class MyApp extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       home: EditProfilePage(),
+//     );
+//   }
+// }
+
 class EditProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -32,7 +45,7 @@ class EditProfilePage extends StatelessWidget {
             CircleAvatar(
               radius: 50,
               backgroundImage: AssetImage(
-                  'assets/images/oswald.jpg'), // Ganti dengan path gambar yang benar
+                  'assets/your_image.jpg'), // Ganti dengan path gambar yang benar
             ),
             SizedBox(height: 20),
 
@@ -76,13 +89,7 @@ class EditProfilePage extends StatelessWidget {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
                 ),
-                child: Text(
-                  'Save',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                  ),
-                ),
+                child: Text('Save'),
               ),
             ),
           ],

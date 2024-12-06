@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:get_storage/get_storage.dart';
-import 'package:travel_savy/controllers/authentication.dart';
-import 'package:travel_savy/page/home_screen.dart';
-import 'terms_and_privacy.dart';
-import 'package:travel_savy/page/versi.dart';
-import 'package:travel_savy/page/my_itinerary.dart';
-import 'profile.dart';
-import 'bottom_nav.dart';
+import 'package:travel_savy/page/terms_and_privacy.dart';
+// import 'terms_and_privacy_page.dart'; // Pastikan file ini ada dan berfungsi
+import 'profile.dart'; // Pastikan file ini ada dan berfungsi
 
 class ProfileDashboard extends StatefulWidget {
   @override
@@ -14,24 +9,6 @@ class ProfileDashboard extends StatefulWidget {
 }
 
 class _ProfileDashboardState extends State<ProfileDashboard> {
-  String? userName;
-
-  @override
-  void initState() {
-    super.initState();
-
-    // Retrieve the user's name from GetStorage
-    var userData = GetStorage().read('user');
-    if (userData != null) {
-      setState(() {
-        userName = userData['name'];
-      });
-    } else {
-      debugPrint("No user data found in GetStorage");
-      userName = "User"; // Default name if no user data is found
-    }
-  }
-
   void onProfileTap(BuildContext context) {
     Navigator.push(
       context,
@@ -39,18 +16,12 @@ class _ProfileDashboardState extends State<ProfileDashboard> {
     );
   }
 
-  void onItineraryTap() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => MyItinerary()),
-    );
+  void onLanguageTap() {
+    print("Bahasa diklik");
   }
 
   void onAppVersionTap() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => VersionScreen()),
-    );
+    print("Versi Aplikasi diklik");
   }
 
   void onTermsTap(BuildContext context) {
@@ -60,40 +31,14 @@ class _ProfileDashboardState extends State<ProfileDashboard> {
     );
   }
 
-  void onMenuTap(int index) {
-    if (index == 0) {
-      Navigator.pushReplacement(
-        context,
-        PageRouteBuilder(
-          pageBuilder: (context, animation, secondaryAnimation) => HomeScreen(),
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            var begin = Offset(-1.0, 0.0);
-            var end = Offset.zero;
-            var curve = Curves.ease;
-            var tween =
-                Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-            return SlideTransition(
-                position: animation.drive(tween), child: child);
-          },
-        ),
-      );
-    }
-  }
-
-  Future<void> onLogoutTap() async {
-    await AuthenticationController().logout();
-    // Redirect user to login page after logout
-    Navigator.pushReplacementNamed(context, '/login');
+  void onPolicyTap() {
+    print("Policy diklik");
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.blue[800],
-      bottomNavigationBar: BottomNavigation(
-        selectedIndex: 3,
-        onTap: onMenuTap,
-      ),
       body: Stack(
         children: [
           // Gambar kanan.png yang tetap di kanan layar
@@ -101,8 +46,10 @@ class _ProfileDashboardState extends State<ProfileDashboard> {
             top: 0,
             right: 0,
             child: Image.asset(
-              'assets/images/kanan.png',
+              'assets/kanan.png',
               scale: 2.5,
+              // height: MediaQuery.of(context).size.height,
+              //fit: BoxFit.fitHeight,
             ),
           ),
           // Gambar di posisi kiri atas
@@ -110,7 +57,7 @@ class _ProfileDashboardState extends State<ProfileDashboard> {
             top: 0,
             left: 0,
             child: Image.asset(
-              'assets/images/kiri.png',
+              'assets/kiri.png',
               width: 100, // Sesuaikan ukuran gambar
               height: 100, // Sesuaikan ukuran gambar
               fit: BoxFit.cover,
@@ -122,16 +69,18 @@ class _ProfileDashboardState extends State<ProfileDashboard> {
               CircleAvatar(
                 radius: 50,
                 backgroundImage: AssetImage(
-                  'assets/images/profile_image.png',
+                  'assets/profile_image.png',
                 ),
               ),
               SizedBox(height: 10),
               Text(
-                'Hi, ${userName ?? "User"}', // Display the user's name dynamically
+                'Hi, Oswald',
                 style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold),
+                  fontFamily: 'Montserrat',
+                  color: Colors.white,
+                  fontSize: 40,
+                  fontWeight: FontWeight.w900,
+                ),
               ),
               SizedBox(height: 20),
               Container(
@@ -194,20 +143,27 @@ class _ProfileDashboardState extends State<ProfileDashboard> {
                           onProfileTap(context);
                         },
                       ),
+                      // ListTile(
+                      //   leading: Icon(Icons.language),
+                      //   title: Text(
+                      //     "Bahasa",
+                      //     style: TextStyle(
+                      //       fontFamily: 'Montserrat',
+                      //     ),
+                      //   ),
+                      //   trailing: Icon(Icons.arrow_forward_ios),
+                      //   onTap: onLanguageTap,
+                      // ),
                       ListTile(
-                        leading: Image.asset(
-                          'assets/images/my_itinerary.png',
-                          width: 32,
-                          height: 32,
-                        ),
+                        leading: Icon(Icons.info),
                         title: Text(
-                          "My Itinerary",
+                          "Versi Aplikasi",
                           style: TextStyle(
                             fontFamily: 'Montserrat',
                           ),
                         ),
                         trailing: Icon(Icons.arrow_forward_ios),
-                        onTap: onItineraryTap,
+                        onTap: onAppVersionTap,
                       ),
                       ListTile(
                         leading: Icon(Icons.privacy_tip),
@@ -220,19 +176,6 @@ class _ProfileDashboardState extends State<ProfileDashboard> {
                         trailing: Icon(Icons.arrow_forward_ios),
                         onTap: () {
                           onTermsTap(context);
-                        },
-                      ),
-                      ListTile(
-                        leading: Icon(Icons.info),
-                        title: Text(
-                          "Versi Aplikasi",
-                          style: TextStyle(
-                            fontFamily: 'Montserrat',
-                          ),
-                        ),
-                        trailing: Icon(Icons.arrow_forward_ios),
-                        onTap: () {
-                          onAppVersionTap();
                         },
                       ),
                     ],
