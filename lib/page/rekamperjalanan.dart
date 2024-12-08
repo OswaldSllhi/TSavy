@@ -23,8 +23,8 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  final ceritacontroller ceritaController = Get.put(ceritacontroller()); // Inisialisasi CeritaController
-  int _selectedIndex = 1; // Indeks untuk halaman rekam perjalanan
+  final ceritacontroller ceritaController = Get.put(ceritacontroller());
+  int _selectedIndex = 1;
 
   @override
   void initState() {
@@ -43,7 +43,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Hello Travellers'),
-        automaticallyImplyLeading: false, // Menyembunyikan tombol kembali
+        automaticallyImplyLeading: false,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -57,12 +57,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
             SizedBox(height: 8),
             ElevatedButton(
               onPressed: () {
-                // Navigate to TulisCerita Page
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                    builder: (context) =>  TulisCerita(),
-                  ),
+                  MaterialPageRoute(builder: (context) => TulisCerita()),
                 );
               },
               child: Text("Tulis Ceritamu"),
@@ -81,6 +78,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   itemCount: ceritaController.ceritas.length,
                   itemBuilder: (context, index) {
                     final story = ceritaController.ceritas[index];
+                    final city = story["city"];
+
                     return GestureDetector(
                       onTap: () {
                         Navigator.push(
@@ -92,12 +91,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       },
                       child: Card(
                         child: ListTile(
-                          leading: story["image"] != null
-                              ? Image.network(
-                                  story["image"],
+                          leading: city != null && city["id"] != null
+                              ? Image.asset(
+                                  'assets/images/cities/${city["id"]}.png', // Ambil gambar berdasarkan city_id
                                   width: 80,
                                   height: 80,
                                   fit: BoxFit.cover,
+                                  errorBuilder: (context, error, stackTrace) => Icon(Icons.image, size: 80), // Default icon jika gambar tidak ditemukan
                                 )
                               : Icon(Icons.image, size: 80),
                           title: Text(story["title"] ?? 'Tanpa Judul'),
@@ -105,7 +105,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(story["content"] ?? 'Konten tidak tersedia'),
-                              Text('Tujuan: ${story["destination"] ?? "Tidak disebutkan"}'),
+                              Text('Kota: ${city != null ? city["name"] : "Tidak disebutkan"}'),
                             ],
                           ),
                         ),
@@ -131,42 +131,10 @@ class StoryDetailScreen extends StatelessWidget {
 
   StoryDetailScreen({required this.story});
 
-  // Fungsi untuk menampilkan dialog konfirmasi penghapusan
-void _showDeleteConfirmationDialog(BuildContext context) {
-  showDialog(
-    context: context,
-    builder: (context) => AlertDialog(
-      title: Text("Are you sure to delete this story?"),
-      actions: [
-        TextButton(
-          onPressed: () {
-            Navigator.of(context).pop(); // Tutup dialog jika "No" dipilih
-          },
-          child: Text("No"),
-        ),
-        TextButton(
-          onPressed: () async {
-            // Menutup dialog konfirmasi
-            Navigator.of(context).pop(); 
-
-            // Memanggil fungsi untuk menghapus cerita dan mengarahkan ke halaman rekam perjalanan
-            bool isDeleted = await Get.find<ceritacontroller>().destroyCerita(story['id'], context);
-            
-            // Kembali ke halaman sebelumnya setelah cerita dihapus
-            if (isDeleted) {
-              Navigator.of(context).pop(); // Kembali ke halaman sebelumnya
-            }
-          },
-          child: Text("Yes"),
-        ),
-      ],
-    ),
-  );
-}
-
-
   @override
   Widget build(BuildContext context) {
+    final city = story["city"];
+
     return Scaffold(
       appBar: AppBar(
         title: Text(story["title"] ?? 'Tanpa Judul'),
@@ -176,11 +144,12 @@ void _showDeleteConfirmationDialog(BuildContext context) {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            story["image"] != null
-                ? Image.network(
-                    story["image"],
+            city != null && city["id"] != null
+                ? Image.asset(
+                    'assets/images/cities/${city["id"]}.png', // Gambar berdasarkan city_id
                     width: double.infinity,
                     fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) => Icon(Icons.image, size: 200), // Default jika gambar tidak ditemukan
                   )
                 : Icon(Icons.image, size: 200),
             SizedBox(height: 16),
@@ -195,18 +164,9 @@ void _showDeleteConfirmationDialog(BuildContext context) {
               story["content"] ?? 'Konten tidak tersedia',
               textAlign: TextAlign.justify,
             ),
-            SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () {
-                _showDeleteConfirmationDialog(context); // Memanggil dialog konfirmasi
-              },
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-              child: Text("Hapus Cerita ini ?"),
-            ),
           ],
         ),
       ),
     );
   }
 }
-
