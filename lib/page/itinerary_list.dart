@@ -103,7 +103,7 @@ class _ItineraryPageState extends State<ItineraryPage> {
           Stack(
             children: [
               Image.asset(
-                'assets/Shibuya.png', // Ganti dengan gambar header Anda
+                'assets/images/Shibuya.png', // Ganti dengan gambar header Anda
                 height: 250,
                 width: double.infinity,
                 fit: BoxFit.cover,

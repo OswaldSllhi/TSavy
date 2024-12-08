@@ -1,20 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:travel_savy/controllers/authentication.dart';
 import 'package:travel_savy/page/auth/register.dart';
-import 'package:travel_savy/page/home_screen.dart'; // Import HomeScreen
+import 'package:travel_savy/page/home_screen.dart'; // Pastikan RegistPage diimpor
 
 class LoginPage extends StatelessWidget {
-  LoginPage({Key? key}) : super(key: key);
-
-  final TextEditingController _usernameController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  RxBool rememberMe = false.obs; // Mengatur status checkbox
+  const LoginPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final AuthenticationController _authenticationController = Get.put(AuthenticationController());
-
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -22,13 +14,14 @@ class LoginPage extends StatelessWidget {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Color(0xFF277BC0),
-              Color(0xFF071952),
+              Color(0xFF277BC0), // Warna pertama (277BC0)
+              Color(0xFF071952), // Warna kedua (071952)
             ],
           ),
         ),
         child: Stack(
           children: [
+            // Bulat atas di kiri atas
             Positioned(
               top: 0,
               left: -13,
@@ -38,6 +31,8 @@ class LoginPage extends StatelessWidget {
                 child: Image.asset('assets/images/bulatatas.png'),
               ),
             ),
+
+            // Logo di tengah atas
             Align(
               alignment: const Alignment(0, -0.75),
               child: Image.asset(
@@ -46,6 +41,8 @@ class LoginPage extends StatelessWidget {
                 height: 190,
               ),
             ),
+
+            // Form di bawah logo dengan border radius
             Align(
               alignment: Alignment.bottomCenter,
               child: Container(
@@ -64,56 +61,47 @@ class LoginPage extends StatelessWidget {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      TextField(
-                        controller: _usernameController,
-                        decoration: const InputDecoration(
-                          labelText: 'Username',
+                      const TextField(
+                        decoration: InputDecoration(
+                          labelText: 'Email or Phone number',
                           border: OutlineInputBorder(),
                         ),
                       ),
                       const SizedBox(height: 20),
-                      TextField(
-                        controller: _passwordController,
+                      const TextField(
                         obscureText: true,
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
                           labelText: 'Password',
                           border: OutlineInputBorder(),
                         ),
                       ),
                       const SizedBox(height: 20),
+
+                      // Remember Me and Login Button
                       Row(
                         children: [
-                          Obx(() {
-                            return Checkbox(
-                              value: rememberMe.value,
-                              onChanged: (value) {
-                                rememberMe.value = value!;
-                              },
-                            );
-                          }),
+                          Checkbox(value: false, onChanged: (value) {}),
                           const Text("Remember me?"),
                           const Spacer(),
                           ElevatedButton(
-                            onPressed: () async {
-                              await _authenticationController.login(
-                                username: _usernameController.text.trim(),
-                                password: _passwordController.text.trim(),
-                                rememberMe: rememberMe.value, // Mengirimkan status remember me
-                              );
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.blue,
+                            onPressed: () {
+                              // Navigate to HomeScreen
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => HomeScreen(),
                             ),
-                            child: Obx(() {
-                              return _authenticationController.isLoading.value
-                                  ? const CircularProgressIndicator(
-                                      color: Colors.white,
-                                    )
-                                  : const Text('Log in');
-                            }),
+                          );},
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  Colors.blue, // Ubah warna tombol menjadi biru
+                            ),
+                            child: const Text('Log in'),
                           ),
                         ],
                       ),
+                      const SizedBox(height: 20),
+
                       // Divider with text
                       Row(
                         children: <Widget>[
@@ -165,11 +153,11 @@ class LoginPage extends StatelessWidget {
                       // Register Text
                       TextButton(
                         onPressed: () {
-                          // Navigasi ke halaman registrasi
+                          // Navigate to Register Page
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => RegistPage(),
+                              builder: (context) =>  RegistPage(),
                             ),
                           );
                         },

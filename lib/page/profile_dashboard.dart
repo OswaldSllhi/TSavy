@@ -148,7 +148,7 @@ class _ProfileDashboardState extends State<ProfileDashboard> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Hai Oswald! Siap untuk petualangan baru hari ini?',
+                            'Hai Oswald! Siap untuk petualangan baru?',
                             style: TextStyle(
                               fontFamily: 'Arsenal',
                               fontWeight: FontWeight.bold,
