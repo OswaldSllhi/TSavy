@@ -39,29 +39,38 @@ class ceritacontroller extends GetxController {
   }
 
   // Fetch cerita data
-  Future<void> fetchCeritas() async {
-    try {
-      isLoading.value = true;
-      final response = await http.get(
-        Uri.parse('${baseUrl}ceritas'),
-        headers: {
-          'Accept': 'application/json',
-          'Authorization': 'Bearer ${box.read('token')}',
-        },
-      );
+Future<void> fetchCeritas() async {
+  try {
+    isLoading.value = true;
+    final response = await http.get(
+      Uri.parse('${baseUrl}ceritas'),
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${box.read('token')}',
+      },
+    );
 
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        ceritas.value = List<Map<String, dynamic>>.from(data['data']);
-      } else {
-        Get.snackbar('Error', 'Gagal memuat data cerita');
-      }
-    } catch (e) {
-      Get.snackbar('Error', 'Terjadi kesalahan: $e');
-    } finally {
-      isLoading.value = false;
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      ceritas.value = List<Map<String, dynamic>>.from(data['data'].map((story) {
+        return {
+          'id': story['id'],
+          'title': story['title'],
+          'content': story['content'],
+          'image': story['image'],
+          'city': story['city'], // Tambahkan data city
+        };
+      }));
+    } else {
+      Get.snackbar('Error', 'Gagal memuat data cerita');
     }
+  } catch (e) {
+    Get.snackbar('Error', 'Terjadi kesalahan: $e');
+  } finally {
+    isLoading.value = false;
   }
+}
+
 
   // Add cerita
   Future<bool> addCerita({

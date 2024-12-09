@@ -1,28 +1,66 @@
 import 'package:flutter/material.dart';
+import 'package:travel_savy/page/home_screen.dart';
+import 'package:travel_savy/page/itinerary_2.dart';
+import 'package:travel_savy/page/profile_dashboard.dart';
+import 'package:travel_savy/page/rekamperjalanan.dart';
+import 'bottom_nav.dart';
 
-class ItineraryPage extends StatelessWidget {
+class ItineraryPage extends StatefulWidget {
   const ItineraryPage({super.key});
+
+  @override
+  _ItineraryPageState createState() => _ItineraryPageState();
+}
+
+class _ItineraryPageState extends State<ItineraryPage> {
+  int selectedIndex = 2;
+
+  void onTap(int index) {
+    setState(() {
+      selectedIndex = index; // Update the selected index
+    });
+
+    // Navigate based on the selected index
+    switch (index) {
+      case 0:
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => HomeScreen()),
+        );
+        break;
+      case 1:
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => DashboardScreen()),
+        );
+        break;
+      case 2:
+        // Stay on the current page
+        break;
+      case 3:
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => ProfileDashboard()),
+        );
+        break;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        title: const Text(
+        title: Text(
           'My Itinerary',
           style: TextStyle(
             color: Colors.black,
             fontWeight: FontWeight.bold,
+            fontSize: 20,
           ),
         ),
         centerTitle: true,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -31,7 +69,11 @@ class ItineraryPage extends StatelessWidget {
           children: [
             GestureDetector(
               onTap: () {
-                // Tambahkan fungsi ketika card ditekan jika diperlukan
+            // Tambahkan navigasi jika dibutuhkan
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ProfileDashboard()),
+            );
               },
               child: Card(
                 elevation: 4,
@@ -97,9 +139,14 @@ class ItineraryPage extends StatelessWidget {
                 height: 35,
                 width: 230,
                 child: ElevatedButton(
-                  onPressed: () {
-                    // Tambahkan fungsi untuk membuat itinerary baru
-                  },
+                  onPressed:  () {
+                  // Navigasi ke generate_itinerary.dart
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => TravelPlannerPage()),
+                  );
+                },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue,
                     shape: RoundedRectangleBorder(
@@ -119,6 +166,10 @@ class ItineraryPage extends StatelessWidget {
             ),
           ],
         ),
+      ),
+      bottomNavigationBar: BottomNavigation(
+        selectedIndex: selectedIndex,
+        onTap: onTap,
       ),
     );
   }
