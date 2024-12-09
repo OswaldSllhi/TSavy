@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:travel_savy/page/auth/login.dart';
 import 'package:travel_savy/page/auth/register.dart';
-import 'package:travel_savy/page/oswald.dart';
 import 'package:travel_savy/page/profile_dashboard.dart';
 import 'package:travel_savy/page/splash.dart';
 import 'package:travel_savy/page/tulis_cerita.dart';

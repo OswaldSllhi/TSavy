@@ -4,6 +4,7 @@ import 'package:travel_savy/controllers/authentication.dart';
 import 'package:travel_savy/page/home_screen.dart';
 import 'terms_and_privacy.dart';
 import 'package:travel_savy/page/versi.dart';
+import 'package:get/get.dart';
 import 'package:travel_savy/page/my_itinerary.dart';
 import 'profile.dart';
 import 'bottom_nav.dart';
@@ -148,7 +149,7 @@ class _ProfileDashboardState extends State<ProfileDashboard> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Hai Oswald! Siap untuk petualangan baru hari ini?',
+                            'Hai ${userName ?? "User"} Siap untuk petualangan baru hari ini?',
                             style: TextStyle(
                               fontFamily: 'Arsenal',
                               fontWeight: FontWeight.bold,
@@ -233,6 +234,22 @@ class _ProfileDashboardState extends State<ProfileDashboard> {
                         trailing: Icon(Icons.arrow_forward_ios),
                         onTap: () {
                           onAppVersionTap();
+                        },
+                      ),
+                      ListTile(
+                        leading: Icon(Icons.logout, color: Colors.red),
+                        title: Text(
+                          "Logout",
+                          style: TextStyle(
+                            fontFamily: 'Montserrat',
+                            color: Colors.red, // Tambahkan warna merah untuk menunjukkan logout
+                          ),
+                        ),
+                        trailing: Icon(Icons.arrow_forward_ios, color: Colors.red),
+                        onTap: () async {
+                          // Memanggil fungsi logout dari AuthenticationController
+                          AuthenticationController authController = Get.put(AuthenticationController());
+                          await authController.logout();
                         },
                       ),
                     ],
