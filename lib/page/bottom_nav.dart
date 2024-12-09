@@ -2,7 +2,6 @@ import 'package:feather_icons/feather_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:travel_savy/page/caritrip.dart';
 import 'package:travel_savy/page/home_screen.dart';
-import 'package:travel_savy/page/itinerarypage.dart';
 import 'package:travel_savy/page/profile_dashboard.dart';
 import 'rekamperjalanan.dart';
 
@@ -38,7 +37,7 @@ class BottomNavigation extends StatelessWidget {
         } else if (index == 2) {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => ItineraryPage()),
+            MaterialPageRoute(builder: (context) => CariTrip()),
           );
         } else if (index == 3) {
           Navigator.pushReplacement(

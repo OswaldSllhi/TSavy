@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+
 import 'package:travel_savy/constants/constants.dart';
 
 class CityController extends GetxController {
@@ -23,11 +24,7 @@ class CityController extends GetxController {
       if (response.statusCode == 200) {
         final result = jsonDecode(response.body);
         if (result['success'] == true) {
-          // Tambahkan properti `imagePath` untuk setiap city
-          cities.value = (result['data'] as List).map((city) {
-            city['imagePath'] = 'assets/images/cities/${city['id']}.png'; // Path gambar berdasarkan city_id
-            return city;
-          }).toList();
+          cities.value = result['data'];
         } else {
           Get.snackbar('Error', 'Respon API gagal: ${result['message']}');
         }
