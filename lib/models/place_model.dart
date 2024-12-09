@@ -1,32 +1,24 @@
-import 'package:travel_savy/models/type_model.dart';
+import 'package:travel_savy/controllers/CityController.dart';
 
 class DestinationModel {
-  String name;
-  String image;
-  List<String> type;
-  int distance;
+  final int id;
+  final String name;
+  final String description;
+  final String image;
 
-  DestinationModel(
-      {required this.name,
-      required this.image,
-      required this.type,
-      required this.distance}); //
+  DestinationModel({
+    required this.id,
+    required this.name,
+    required this.description,
+    required this.image,
+  });
+
+  factory DestinationModel.fromJson(Map<String, dynamic> json) {
+    return DestinationModel(
+      id: json['id'],
+      name: json['name'],
+      description: json['description'],
+      image: json['image'],
+    );
+  }
 }
-
-var places = [
-  DestinationModel(
-      name: "Japan ",
-      image: "japan.png",
-      type: [Type.country],
-      distance: 100),
-  DestinationModel(
-      name: "Japan ",
-      image: "japan.png",
-      type: [Type.country],
-      distance: 100),
-  DestinationModel(
-      name: "Japan ",
-      image: "japan.png",
-      type: [Type.country],
-      distance: 100)
-];
