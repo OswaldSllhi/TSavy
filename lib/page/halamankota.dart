@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:travel_savy/page/itinerary_list.dart';
+import 'package:travel_savy/page/rekamperjalanan.dart';
 
 class HalamanKota extends StatelessWidget {
   const HalamanKota({super.key});
@@ -63,7 +65,14 @@ class HalamanKota extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   ElevatedButton.icon(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>  ItineraryPage(),
+                        ),
+                      );
+                    },
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 15),
                       backgroundColor: const Color(0xFF277BC0), // Warna utama
@@ -76,7 +85,14 @@ class HalamanKota extends StatelessWidget {
                   ),
                   const SizedBox(height: 10),
                   ElevatedButton.icon(
-                    onPressed: () {},
+                    onPressed: () {
+                    Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => DashboardScreen(),
+                  ),
+                );
+                    },
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 15),
                       backgroundColor: Colors.white,
@@ -118,7 +134,7 @@ class HalamanKota extends StatelessWidget {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 10),
                   ListView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),

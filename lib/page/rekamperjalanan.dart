@@ -92,12 +92,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       },
                       child: Card(
                         child: ListTile(
-                          leading: story["image"] != null
-                              ? Image.network(
-                                  story["image"],
+                          leading: city != null && city["id"] != null
+                              ? Image.asset(
+                                  'assets/images/cities/${city["id"]}.png', // Ambil image berdasarkan city_id
                                   width: 80,
                                   height: 80,
                                   fit: BoxFit.cover,
+                                  errorBuilder: (context, error, stackTrace) => Icon(Icons.image, size: 80), 
                                 )
                               : Icon(Icons.image, size: 80),
                           title: Text(story["title"] ?? 'Tanpa Judul'),

@@ -23,7 +23,7 @@ class CityController extends GetxController {
       if (response.statusCode == 200) {
         final result = jsonDecode(response.body);
         if (result['success'] == true) {
-          // Tambahkan properti `imagePath` untuk setiap city
+          // Tambahkan property `imagePath` untuk setiap city
           cities.value = (result['data'] as List).map((city) {
             city['imagePath'] = 'assets/images/cities/${city['id']}.png'; // Path gambar berdasarkan city_id
             return city;

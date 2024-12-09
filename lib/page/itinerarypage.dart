@@ -3,6 +3,7 @@ import 'package:travel_savy/page/home_screen.dart';
 import 'package:travel_savy/page/itinerary_2.dart';
 import 'package:travel_savy/page/profile_dashboard.dart';
 import 'package:travel_savy/page/rekamperjalanan.dart';
+import 'bottom_nav.dart';
 import 'bottom_nav.dart'; 
 
 class ItineraryPage extends StatefulWidget {
@@ -13,7 +14,7 @@ class ItineraryPage extends StatefulWidget {
 }
 
 class _ItineraryPageState extends State<ItineraryPage> {
-  int selectedIndex = 2; 
+  int selectedIndex = 2;
 
   void onTap(int index) {
     setState(() {
@@ -69,7 +70,11 @@ class _ItineraryPageState extends State<ItineraryPage> {
           children: [
             GestureDetector(
               onTap: () {
-                // Tambahkan fungsi ketika card ditekan jika diperlukan
+            // Tambahkan navigasi jika dibutuhkan
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ProfileDashboard()),
+            );
               },
               child: Card(
                 elevation: 4,

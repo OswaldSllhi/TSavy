@@ -8,7 +8,7 @@ import 'package:travel_savy/page/home_screen.dart';
 import 'package:travel_savy/page/splash.dart';
 // import 'package:google_sign_in/google_sign_in.dart';
 // import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
-
+  
 class AuthenticationController extends GetxController {
   final isLoading = false.obs;
 
@@ -60,17 +60,17 @@ class AuthenticationController extends GetxController {
 
         // Menampilkan snackbar untuk memberi tahu user
         Get.snackbar('Success', 'User registered successfully!',
-            snackPosition: SnackPosition.BOTTOM);
+            snackPosition: SnackPosition.TOP);
       } else {
         // Jika API mengembalikan status selain 201, tampilkan pesan error
         debugPrint('Register Error: ${json.decode(response.body)}');
         Get.snackbar('Error', 'Failed to register user.',
-            snackPosition: SnackPosition.BOTTOM);
+            snackPosition: SnackPosition.TOP);
       }
     } catch (e) {
       debugPrint('Exception: ${e.toString()}');
       Get.snackbar('Error', 'Something went wrong.',
-          snackPosition: SnackPosition.BOTTOM);
+          snackPosition: SnackPosition.TOP);
     } finally {
       isLoading.value = false; // Reset loading state setelah request
     }
@@ -158,12 +158,12 @@ Future<void> logout() async {
       debugPrint('Logout failed with status code: ${response.statusCode}');
       debugPrint('Response: ${response.body}');
       Get.snackbar('Error', 'Failed to logout',
-          snackPosition: SnackPosition.BOTTOM);
+          snackPosition: SnackPosition.TOP);
     }
   } catch (e) {
     debugPrint('Logout Exception: $e');
     Get.snackbar('Error', 'Something went wrong. Please try again later.',
-        snackPosition: SnackPosition.BOTTOM);
+        snackPosition: SnackPosition.TOP);
   } finally {
     isLoading.value = false;
   }
