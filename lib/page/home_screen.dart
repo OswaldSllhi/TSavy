@@ -79,7 +79,7 @@ class HomeScreen extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => HalamanKota()),
+          MaterialPageRoute(builder: (context) => HalamanKota()), // Mengarahkan ke page HalamanKota
         );
       },
       child: Container(

@@ -140,7 +140,7 @@ Future<bool> destroyCerita(int ceritaId, BuildContext context) async {
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => DashboardScreen()),
-        (route) => false, // Menutup semua halaman sebelumnya
+        (route) => false, // Menutup semua halaman sebelumny
       );
 
 

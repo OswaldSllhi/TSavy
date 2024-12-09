@@ -93,7 +93,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         child: ListTile(
                           leading: city != null && city["id"] != null
                               ? Image.asset(
-                                  'assets/images/cities/${city["id"]}.png', // Ambil gambar berdasarkan city_id
+                                  'assets/images/cities/${city["id"]}.png', // Ambil image berdasarkan city_id
                                   width: 80,
                                   height: 80,
                                   fit: BoxFit.cover,
