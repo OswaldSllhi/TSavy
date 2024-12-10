@@ -17,7 +17,7 @@ class DestinationModel {
     return DestinationModel(
       id: json['id'],
       name: json['name'],
-      description: json['description'],
+      description: json['deskripsi'],
       image: json['image'],
     );
   }
