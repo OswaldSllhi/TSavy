@@ -11,9 +11,10 @@ class WisataController extends GetxController {
   Future<void> fetchAllWisata() async {
     isLoading.value = true;
     try {
+      final token = getToken();
       final response = await http.get(
         Uri.parse('${baseUrl}wisata'),
-        headers: {'Authorization': 'Bearer YOUR_TOKEN_HERE'},
+        headers: {'Authorization': 'Bearer $token'},
       );
 
       if (response.statusCode == 200) {
@@ -36,12 +37,15 @@ class WisataController extends GetxController {
   }
 
   /// Ambil data wisata berdasarkan city_id
-  Future<void> fetchWisataByCityId(int city_id) async {
+  Future<void> fetchWisataByCityId(int cityId) async {
     isLoading.value = true;
     try {
+            final token = getToken();
       final response = await http.get(
-        Uri.parse('${baseUrl}wisata/city/{$city_id}'),
-        headers: {'Authorization': 'Bearer YOUR_TOKEN_HERE'},
+        Uri.parse('${baseUrl}wisata/city/$cityId'),
+        headers: {'Authorization': 'Bearer $token',
+                  'Content-Type': 'application/json',
+                },
       );
 
       if (response.statusCode == 200) {
@@ -67,11 +71,12 @@ class WisataController extends GetxController {
   Future<void> fetchWisataByCategoryIds(List<int> categoryIds) async {
     isLoading.value = true;
     try {
+      final token = getToken();
       final response = await http.post(
         Uri.parse('$baseUrl/wisata/by-categories'),
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer YOUR_TOKEN_HERE',
+          'Authorization': 'Bearer $token',
         },
         body: json.encode({"category_ids": categoryIds}),
       );
@@ -89,8 +94,7 @@ class WisataController extends GetxController {
       }
     } catch (e) {
       print("Error fetching data by category_ids: $e");
-      Get.snackbar(
-          "Error", "Gagal mengambil data wisata berdasarkan kategori.");
+      Get.snackbar("Error", "Gagal mengambil data wisata berdasarkan kategori.");
     } finally {
       isLoading.value = false;
     }

@@ -84,6 +84,8 @@ flutter:
   assets:
   - assets/images/
   - assets/images/cities/ # Patch untuk image city
+  - assets/images/wisata/
+  - assets/images/public/wisata/
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 
