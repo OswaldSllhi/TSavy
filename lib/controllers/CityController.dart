@@ -25,7 +25,8 @@ class CityController extends GetxController {
         if (result['success'] == true) {
           // Tambahkan property `imagePath` untuk setiap city
           cities.value = (result['data'] as List).map((city) {
-            city['imagePath'] = 'assets/images/cities/${city['id']}.png'; // Path gambar berdasarkan city_id
+            city['imagePath'] = 'assets/images/cities/${city['id']}.png'; // Path gambar
+            city['city_deskripsi'] = city['city_deskripsi'] ?? 'Deskripsi tidak tersedia'; // Tambahkan deskripsi
             return city;
           }).toList();
         } else {

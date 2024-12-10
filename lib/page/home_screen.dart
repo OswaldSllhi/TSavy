@@ -7,6 +7,7 @@ import 'package:travel_savy/controllers/CityController.dart';
 import 'package:travel_savy/models/place_model.dart';
 import 'package:travel_savy/models/type_model.dart';
 import 'package:travel_savy/page/bottom_nav.dart';
+import 'package:travel_savy/page/halamankota.dart';
 import 'package:travel_savy/page/favorittempat.dart';
 import 'profile_dashboard.dart';
 
@@ -75,40 +76,51 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  Widget buildPlaceList() {
-    return Obx(() {
-      if (cityController.isLoading.value) {
-        return const Center(child: CircularProgressIndicator());
-      }
+Widget buildPlaceList() {
+  return Obx(() {
+    if (cityController.isLoading.value) {
+      return const Center(child: CircularProgressIndicator());
+    }
 
-      if (cityController.cities.isEmpty) {
-        return const Center(child: Text("Tidak ada data kota yang tersedia."));
-      }
+    if (cityController.cities.isEmpty) {
+      return const Center(child: Text("Tidak ada data kota yang tersedia."));
+    }
 
-      return ListView.separated(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        physics: const NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
-        itemBuilder: (context, index) {
-          final city = cityController.cities[index];
-          return _cityCard(
-            cityName: city['city_name'] ?? 'Nama tidak tersedia',
-            description: city['description'] ?? 'Deskripsi tidak tersedia',
-            imagePath: city['imagePath'],
-          );
-        },
-        separatorBuilder: (context, index) => const SizedBox(height: 11),
-        itemCount: cityController.cities.length,
+    return ListView.separated(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      physics: const NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      itemBuilder: (context, index) {
+        final city = cityController.cities[index];
+        return _cityCard(
+          cityName: city['city_name'] ?? 'Nama tidak tersedia',
+          description: city['city_deskripsi'] ?? 'Deskripsi tidak tersedia',
+          imagePath: city['imagePath'],
+          cityId: city['id'], // Kirimkan id kota
+        );
+      },
+      separatorBuilder: (context, index) => const SizedBox(height: 11),
+      itemCount: cityController.cities.length,
+    );
+  });
+}
+
+Widget _cityCard({
+  required String cityName,
+  required String description,
+  required String imagePath,
+  required int cityId, // Tambahkan parameter id
+}) {
+  return GestureDetector(
+    onTap: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => HalamanKota(cityId: cityId),
+        ),
       );
-    });
-  }
-
-  Container _cityCard({
-    required String cityName,
-    required String description,
-    required String imagePath,
-  }) {
-    return Container(
+    },
+    child: Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -184,8 +196,10 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-    );
-  }
+    ),
+  );
+}
+
 
   // SizedBox _types() {
   //   return SizedBox(
