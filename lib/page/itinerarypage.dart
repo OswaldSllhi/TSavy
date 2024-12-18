@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:travel_savy/page/home_screen.dart';
 import 'package:travel_savy/page/itinerary_2.dart';
+import 'package:travel_savy/page/itinerary_schedule.dart';
 import 'package:travel_savy/page/profile_dashboard.dart';
 import 'package:travel_savy/page/rekamperjalanan.dart';
 import 'bottom_nav.dart';
@@ -73,7 +74,7 @@ class _ItineraryPageState extends State<ItineraryPage> {
             // Tambahkan navigasi jika dibutuhkan
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => ProfileDashboard()),
+              MaterialPageRoute(builder: (context) => ItinerarySchedulePage()),
             );
               },
               child: Card(

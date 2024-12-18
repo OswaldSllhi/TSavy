@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:travel_savy/page/itinerary_list.dart';
+import 'package:travel_savy/controllers/CityController.dart';
+import 'package:travel_savy/controllers/CategoryController.dart';
+import 'package:travel_savy/controllers/itinerary_controller.dart';
 
 class TravelPlannerPage extends StatefulWidget {
   @override
@@ -7,302 +11,269 @@ class TravelPlannerPage extends StatefulWidget {
 }
 
 class _TravelPlannerPageState extends State<TravelPlannerPage> {
-  final Color sectionTitleColor = Color(0xFF277BC0);
-
-  String? selectedCountry;
   String? selectedCity;
+  List<int> selectedCategories = [];
   String? selectedMinBudget;
   String? selectedMaxBudget;
-  String? selectedAccommodation;
+  DateTime? departureDate;
+  DateTime? returnDate;
 
-  List<String> countries = ['Indonesia', 'Jepang', 'Inggris'];
+  final cityController = Get.put(CityController());
+  final categoryController = Get.put(CategoryController());
+  final itineraryController = Get.put(ItineraryController());
 
-  Map<String, List<String>> cities = {
-    'Indonesia': ['Jakarta', 'Bali', 'Yogyakarta', 'Bandung', 'Surabaya'],
-    'Jepang': ['Tokyo', 'Kyoto', 'Osaka', 'Hokkaido', 'Fukuoka'],
-    'Inggris': ['London', 'Manchester', 'Liverpool', 'Edinburgh', 'Bristol'],
-  };
+  @override
+  void initState() {
+    super.initState();
+    cityController.fetchCities();
+    categoryController.fetchCategories();
+  }
 
-  Map<String, bool> travelTypes = {
-    'Santai': false,
-    'Bisnis': false,
-    'Study tour': false,
-  };
-
-  Map<String, bool> activities = {
-    'Pantai': false,
-    'Relaxing': false,
-    'Olahraga': false,
-    'Gunung': false,
-    'Membaca': false,
-    'Party': false,
-    'Camping': false,
-    'Pameran': false,
-    'Perkotaan': false,
-    'Petualangan': false,
-    'Sightseeing': false,
-    'Culinary': false,
-  };
+  Future<void> _selectDate(BuildContext context, bool isDeparture) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    );
+    if (picked != null) {
+      setState(() {
+        if (isDeparture) {
+          departureDate = picked;
+        } else {
+          returnDate = picked;
+        }
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(100.0),
-        child: AppBar(
-          centerTitle: true,
-          backgroundColor: Colors.blue[800],
-          flexibleSpace: Padding(
-            padding: const EdgeInsets.only(top: 20.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 60.0),
-                    child: Center(
-                      child: Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                'Atur Kenyamanan\nPerjalananmu',
-                                style: TextStyle(
-                                  fontFamily: 'Arsenal',
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                  fontSize: 28.3,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                              Text(
-                                '#BersamaTravelSavy',
-                                style: TextStyle(
-                                  fontFamily: 'Arsenal',
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                  fontSize: 10,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
-                          )),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(0.0),
-                  child: Image.asset(
-                    'assets/images/lingkaran.png',
-                    height: 100.0,
-                    width: 50.0,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
+      appBar: AppBar(
+        title: const Text('Travel Planner'),
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildDropdownSection('Kemana tujuan anda?', [
-              _buildDropdown(
-                hint: 'Negara',
-                value: selectedCountry,
-                items: countries,
-                onChanged: (value) {
-                  setState(() {
-                    selectedCountry = value;
-                    selectedCity = null;
-                  });
-                },
-              ),
-              SizedBox(height: 10),
-              _buildDropdown(
-                hint: 'Kota',
+            // Dropdown kota
+            Obx(() {
+              if (cityController.isLoading.value) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              return DropdownButtonFormField<String>(
                 value: selectedCity,
-                items: selectedCountry != null ? cities[selectedCountry]! : [],
+                items: cityController.cities.map((city) {
+                  return DropdownMenuItem(
+                    value: city['id'].toString(),
+                    child: Text(city['city_name']),
+                  );
+                }).toList(),
                 onChanged: (value) {
                   setState(() {
                     selectedCity = value;
                   });
                 },
-              ),
-            ]),
-            SizedBox(height: 20),
-            _buildCheckboxSection(
-              'Cocok untuk jenis perjalanan apa?',
-              travelTypes,
-            ),
-            SizedBox(height: 20),
-            _buildCheckboxSection(
-              'Aktivitas yang anda sukai',
-              activities,
-            ),
-            SizedBox(height: 20),
-            _buildDropdownSection('Budget Perjalanan', [
-              _buildDropdown(
-                hint: 'Minimal',
-                value: selectedMinBudget,
-                items: ['100-500k', '500k-1jt', '1-5jt', '10jt'],
-                onChanged: (value) {
-                  setState(() {
-                    selectedMinBudget = value;
-                  });
-                },
-              ),
-              SizedBox(height: 10),
-              _buildDropdown(
-                hint: 'Maksimal',
-                value: selectedMaxBudget,
-                items: ['10jt', '20jt', '30jt', '40jt'],
-                onChanged: (value) {
-                  setState(() {
-                    selectedMaxBudget = value;
-                  });
-                },
-              ),
-            ]),
-            SizedBox(height: 20),
-            _buildDropdownSection('Jenis Akomodasi', [
-              _buildDropdown(
-                hint: 'Transportasi',
-                value: selectedAccommodation,
-                items: ['Mobil', 'Bus', 'Pesawat'],
-                onChanged: (value) {
-                  setState(() {
-                    selectedAccommodation = value;
-                  });
-                },
-              ),
-            ]),
-            SizedBox(height: 30),
-            Center(
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ItineraryPage(),
-                    ),
-                  );
-                },
-                // onPressed: () {
-                //   //print('Generate data perjalanan...');
-                // },
-                child: Text(
-                  'GENERATE',
-                  style: TextStyle(color: Colors.white),
+                decoration: const InputDecoration(
+                  labelText: 'Select City',
+                  border: OutlineInputBorder(),
                 ),
-                style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                  backgroundColor: Colors.blue,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.0),
+              );
+            }),
+
+            const SizedBox(height: 16.0),
+
+            // Checkbox kategori
+Obx(() {
+  if (categoryController.isLoading.value) {
+    return const Center(child: CircularProgressIndicator());
+  }
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      const Text(
+        'Aktivitas yang anda sukai',
+        style: TextStyle(
+          fontSize: 16.0,
+          fontWeight: FontWeight.bold,
+          color: Colors.blue,
+        ),
+      ),
+      const SizedBox(height: 8.0),
+      Wrap(
+        spacing: 30.0, // Jarak horizontal antar elemen
+        runSpacing: 10.0, // Jarak vertikal antar elemen
+        children: categoryController.categories.map((category) {
+          return Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Checkbox(
+                value: selectedCategories.contains(category['id']),
+                onChanged: (bool? value) {
+                  setState(() {
+                    if (value == true) {
+                      selectedCategories.add(category['id']);
+                    } else {
+                      selectedCategories.remove(category['id']);
+                    }
+                  });
+                },
+                activeColor: Colors.blue, // Warna checkbox
+              ),
+              Text(category['name']),
+            ],
+          );
+        }).toList(),
+      ),
+    ],
+  );
+}),
+
+
+            const SizedBox(height: 16.0),
+
+            // Budget
+            TextField(
+              decoration: const InputDecoration(
+                labelText: 'Minimum Budget',
+                border: OutlineInputBorder(),
+              ),
+              keyboardType: TextInputType.number,
+              onChanged: (value) {
+                selectedMinBudget = value;
+              },
+            ),
+
+            const SizedBox(height: 16.0),
+
+            TextField(
+              decoration: const InputDecoration(
+                labelText: 'Maximum Budget',
+                border: OutlineInputBorder(),
+              ),
+              keyboardType: TextInputType.number,
+              onChanged: (value) {
+                selectedMaxBudget = value;
+              },
+            ),
+
+            const SizedBox(height: 16.0),
+
+            // Tanggal keberangkatan dan kembali
+            Row(
+              children: [
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () => _selectDate(context, true),
+                    child: AbsorbPointer(
+                      child: TextField(
+                        decoration: const InputDecoration(
+                          labelText: 'Departure Date',
+                          border: OutlineInputBorder(),
+                        ),
+                        controller: TextEditingController(
+                          text: departureDate != null
+                              ? '${departureDate!.toLocal()}'.split(' ')[0]
+                              : '',
+                        ),
+                      ),
+                    ),
                   ),
                 ),
-              ),
+                const SizedBox(width: 8.0),
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () => _selectDate(context, false),
+                    child: AbsorbPointer(
+                      child: TextField(
+                        decoration: const InputDecoration(
+                          labelText: 'Return Date',
+                          border: OutlineInputBorder(),
+                        ),
+                        controller: TextEditingController(
+                          text: returnDate != null
+                              ? '${returnDate!.toLocal()}'.split(' ')[0]
+                              : '',
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
+
+            const SizedBox(height: 16.0),
+
+            // Tombol Generate
+            Center(
+              child: ElevatedButton(
+              onPressed: () async {
+                if (selectedCity == null ||
+                    selectedCategories.isEmpty ||
+                    selectedMinBudget == null ||
+                    selectedMaxBudget == null) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Please fill in all fields.')),
+                  );
+                  return;
+                }
+
+                final minBudget = int.tryParse(selectedMinBudget!);
+                final maxBudget = int.tryParse(selectedMaxBudget!);
+
+                if (minBudget == null || maxBudget == null) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Please enter valid budgets.')),
+                  );
+                  return;
+                }
+
+                try {
+                  await itineraryController.generateItinerary(
+                    cityId: int.parse(selectedCity!),
+                    categories: selectedCategories,
+                    days: returnDate != null && departureDate != null
+                        ? returnDate!.difference(departureDate!).inDays
+                        : 1,
+                    price: (minBudget + maxBudget) ~/ 2,
+                  );
+
+                  Get.to(() => ItineraryPage());
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Failed to generate itinerary: $e')),
+                  );
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                backgroundColor: Colors.blue,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30.0),
+                ),
+              ),
+              child: const Text('GENERATE'),
+            ),
+            )
           ],
         ),
       ),
     );
   }
+}
 
-  Widget _buildDropdown({
-    required String hint,
-    required String? value,
-    required List<String> items,
-    required ValueChanged<String?> onChanged,
-  }) {
-    return DropdownButtonFormField<String>(
-      decoration: InputDecoration(
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(6),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(6),
-          borderSide: BorderSide(color: Color(0xFF277BC0), width: 2),
-        ),
-        contentPadding: EdgeInsets.symmetric(horizontal: 10),
+class ItineraryPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Itinerary'),
       ),
-      hint: Text(hint),
-      value: value,
-      items: items.map((item) {
-        return DropdownMenuItem(
-          value: item,
-          child: Text(item),
-        );
-      }).toList(),
-      onChanged: onChanged,
-    );
-  }
-
-  Widget _buildCheckboxSection(String title, Map<String, bool> options) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          title,
-          style: TextStyle(
-            fontFamily: 'Montserrat',
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
-            color: sectionTitleColor,
-          ),
-        ),
-        SizedBox(height: 10),
-        Wrap(
-          spacing: 15.0,
-          runSpacing: 10.0,
-          children: options.keys.map((key) {
-            return Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Checkbox(
-                  value: options[key],
-                  onChanged: (bool? value) {
-                    setState(() {
-                      options[key] = value!;
-                    });
-                  },
-                  fillColor: MaterialStateProperty.all(
-                    Color.fromRGBO(39, 123, 192, 0.47),
-                  ),
-                  side: BorderSide.none,
-                ),
-                Text(
-                  key,
-                  style: TextStyle(fontSize: 16),
-                ),
-              ],
-            );
-          }).toList(),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildDropdownSection(String title, List<Widget> widgets) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          title,
-          style: TextStyle(
-            fontFamily: 'Montserrat',
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
-            color: sectionTitleColor,
-          ),
-        ),
-        SizedBox(height: 10),
-        ...widgets,
-      ],
+      body: const Center(
+        child: Text('Itinerary Page Content'),
+      ),
     );
   }
 }

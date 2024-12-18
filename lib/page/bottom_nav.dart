@@ -1,10 +1,5 @@
 import 'package:feather_icons/feather_icons.dart';
 import 'package:flutter/material.dart';
-
-import 'package:travel_savy/page/caritrip.dart';
-
-import 'package:travel_savy/page/home_screen.dart';
-
 import 'package:travel_savy/page/itinerarypage.dart';
 import 'package:travel_savy/page/home_screen.dart';
 import 'package:travel_savy/page/profile_dashboard.dart';

@@ -177,13 +177,13 @@ void _showDeleteConfirmationDialog(BuildContext context) {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            story["image"] != null
-                ? Image.network(
-                    story["image"],
+            city != null && city["id"] != null
+                ?  Image.asset(
+                    'assets/images/cities/${city["id"]}.png', // Gambar berdasarkan city_id
                     width: double.infinity,
                     fit: BoxFit.cover,
                   )
-                : Icon(Icons.image, size: 200),
+                :  Icon(Icons.image, size: 200),
             SizedBox(height: 16),
             Text(
               story["title"] ?? 'Tanpa Judul',
