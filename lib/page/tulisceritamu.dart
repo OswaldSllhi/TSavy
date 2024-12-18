@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:travel_savy/page/rekamperjalanan.dart';
 
 class TulisCerita extends StatelessWidget {
   const TulisCerita({super.key});

@@ -5,6 +5,7 @@ import 'package:travel_savy/page/itinerary_schedule.dart';
 import 'package:travel_savy/page/profile_dashboard.dart';
 import 'package:travel_savy/page/rekamperjalanan.dart';
 import 'bottom_nav.dart';
+import 'bottom_nav.dart'; 
 
 class ItineraryPage extends StatefulWidget {
   const ItineraryPage({super.key});
