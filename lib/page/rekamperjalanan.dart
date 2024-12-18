@@ -145,13 +145,13 @@ class StoryDetailScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             city != null && city["id"] != null
-                ? Image.asset(
+                ?  Image.asset(
                     'assets/images/cities/${city["id"]}.png', // Gambar berdasarkan city_id
                     width: double.infinity,
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) => Icon(Icons.image, size: 200), // Default jika gambar tidak ditemukan
                   )
-                : Icon(Icons.image, size: 200),
+                :  Icon(Icons.image, size: 200),
             SizedBox(height: 16),
             Text(
               story["title"] ?? 'Tanpa Judul',

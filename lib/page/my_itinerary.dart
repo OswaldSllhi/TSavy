@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:travel_savy/page/itinerary_2.dart';
 import 'package:travel_savy/page/itinerary_schedule.dart';
-import 'package:travel_savy/page/profile_dashboard.dart';
+
 
 class MyItinerary extends StatelessWidget {
   @override
@@ -19,7 +19,7 @@ class MyItinerary extends StatelessWidget {
             // Tambahkan navigasi jika dibutuhkan
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => ProfileDashboard()),
+              MaterialPageRoute(builder: (context) => ItineraryPage()),
             );
           },
         ),
