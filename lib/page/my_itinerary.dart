@@ -32,11 +32,11 @@ class MyItinerary extends StatelessWidget {
             GestureDetector(
               onTap: () {
                 // Navigasi ke itinerary_schedule.dart
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => ItinerarySchedulePage()),
-                );
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //       builder: (context) => ItinerarySchedulePage()),
+                // );
               },
               child: Card(
                 elevation: 4,
