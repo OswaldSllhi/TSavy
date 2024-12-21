@@ -7,6 +7,7 @@ import 'package:travel_savy/page/auth/login.dart';
 import 'package:travel_savy/page/auth/register.dart';
 import 'package:travel_savy/page/categories.dart';
 import 'package:travel_savy/page/profile_dashboard.dart';
+import 'package:travel_savy/page/showitinerary.dart';
 import 'package:travel_savy/page/splash.dart';
 import 'package:travel_savy/page/itinerary_2.dart';
 import 'package:travel_savy/controllers/CityController.dart';

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:travel_savy/page/itinerary_list.dart';
+import 'package:travel_savy/page/itinerarypage.dart';
 import 'package:travel_savy/page/rekamperjalanan.dart';
 import 'package:travel_savy/controllers/CityController.dart';
 import 'package:travel_savy/controllers/WisataController.dart';

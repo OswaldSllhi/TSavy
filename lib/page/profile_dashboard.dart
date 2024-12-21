@@ -41,10 +41,10 @@ class _ProfileDashboardState extends State<ProfileDashboard> {
   }
 
   void onItineraryTap() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => MyItinerary()),
-    );
+    // Navigator.push(
+    //   context,
+    //   MaterialPageRoute(builder: (context) => MyItinerary()),
+    // );
   }
 
   void onAppVersionTap() {

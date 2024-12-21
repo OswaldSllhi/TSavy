@@ -1,9 +1,12 @@
 import 'package:feather_icons/feather_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:travel_savy/controllers/itinerary_controller.dart';
 import 'package:travel_savy/page/itinerarypage.dart';
 import 'package:travel_savy/page/home_screen.dart';
 import 'package:travel_savy/page/profile_dashboard.dart';
 import 'rekamperjalanan.dart';
+import 'package:travel_savy/page/showitinerary.dart';
 
 var menus = [
   FeatherIcons.home,
@@ -35,11 +38,14 @@ class BottomNavigation extends StatelessWidget {
             MaterialPageRoute(builder: (context) => DashboardScreen()),
           );
         } else if (index == 2) {
+          // Navigasi ke halaman ShowItineraryPage dengan controller dari GetX
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => ItineraryPage()),
+            MaterialPageRoute(
+              builder: (context) => ItineraryPage(),  // Tidak perlu mengirim controller
+            ),
           );
-        } else if (index == 3) {
+        }else if (index == 3) {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) => ProfileDashboard()),

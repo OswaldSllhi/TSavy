@@ -230,22 +230,22 @@ Obx(() {
                   return;
                 }
 
-                try {
-                  await itineraryController.generateItinerary(
-                    cityId: int.parse(selectedCity!),
-                    categories: selectedCategories,
-                    days: returnDate != null && departureDate != null
-                        ? returnDate!.difference(departureDate!).inDays
-                        : 1,
-                    price: (minBudget + maxBudget) ~/ 2,
-                  );
+                // try {
+                //   await itineraryController.generateItinerary(
+                //     cityId: int.parse(selectedCity!),
+                //     categories: selectedCategories,
+                //     days: returnDate != null && departureDate != null
+                //         ? returnDate!.difference(departureDate!).inDays
+                //         : 1,
+                //     price: (minBudget + maxBudget) ~/ 2,
+                //   );
 
-                  Get.to(() => ItineraryPage());
-                } catch (e) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Failed to generate itinerary: $e')),
-                  );
-                }
+                //   Get.to(() => ItineraryPage());
+                // } catch (e) {
+                //   ScaffoldMessenger.of(context).showSnackBar(
+                //     SnackBar(content: Text('Failed to generate itinerary: $e')),
+                //   );
+                // }
               },
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
